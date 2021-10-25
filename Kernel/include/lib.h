@@ -1,8 +1,8 @@
-#ifndef _LIB_H
-#define _LIB_H
+#ifndef _LIB_H_
+#define _LIB_H_
 
 #include <stdint.h>
 
-char *cpuVendor(char *result);
+char* cpuVendor(char* result);
 
 #endif

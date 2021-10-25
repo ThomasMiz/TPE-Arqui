@@ -1,9 +1,9 @@
-#ifndef _NAIVE_CONSOLE_H
-#define _NAIVE_CONSOLE_H
+#ifndef _NAIVE_CONSOLE_H_
+#define _NAIVE_CONSOLE_H_
 
 #include <stdint.h>
 
-void ncPrint(const char * string);
+void ncPrint(const char* string);
 void ncPrintChar(char character);
 void ncNewline();
 void ncPrintDec(uint64_t value);

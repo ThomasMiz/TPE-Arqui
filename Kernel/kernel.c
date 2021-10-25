@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <idtLoader.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -83,6 +84,8 @@ void * initializeKernelBinary()
 int main()
 {	
 	ncPrint("[Kernel Main]");
+	load_idt();
+	
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
 	ncPrintHex((uint64_t)sampleCodeModuleAddress);
@@ -100,5 +103,6 @@ int main()
 	ncNewline();
 
 	ncPrint("[Finished]");
+	while(1);
 	return 0;
 }
