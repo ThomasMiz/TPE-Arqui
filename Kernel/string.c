@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <string.h>
 
 void* memset(void* destination, uint8_t c, uint64_t length) {
