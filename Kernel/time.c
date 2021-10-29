@@ -21,7 +21,8 @@ void timerIntHandler(void) {
     int currentSeconds = getElapsedSeconds();
     if (currentSeconds % 5 == 0 && currentSeconds > lastSecondPrinted) {
         ncClear();
-        printTime();
+        ncPrintDec(currentSeconds);
+        ncPrint(" seconds have passed.");
         lastSecondPrinted = currentSeconds;
     }
 }
