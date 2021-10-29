@@ -10,5 +10,8 @@
 #Object files
 *.o
 
-#Whatever the fuck this is
+#?
 .bash_history
+
+#Google Drive files
+*.ini
