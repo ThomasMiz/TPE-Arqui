@@ -1,19 +1,13 @@
-/* sampleCodeModule.c */
-
-char * v = (char*)0xB8000 + 79 * 2;
-
-static int var1 = 0;
-static int var2 = 0;
-
+#include <stdint.h>
+#include <syscalls.h>
 
 int main() {
-	//All the following code may be removed 
-	*v = 'X';
-	*(v+1) = 0x74;
-
-	//Test if BSS is properly set up
-	if (var1 == 0 && var2 == 0)
-		return 0xDEADC0DE;
-
-	return 0xDEADBEEF;
+	
+	char buf[32];
+	while(1) {
+		uint64_t len = sys_read(STDIN, buf, sizeof(buf)/sizeof(buf[0]));
+		sys_write(STDOUT, buf, len);
+	}
+	
+	return 69;
 }
