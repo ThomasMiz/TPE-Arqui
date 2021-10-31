@@ -1,18 +1,21 @@
 # Syscall documentation
 
 ## [0x00] uint64_t sys_read(uint64_t fd, char* buf, uint64_t count);
-Reads up to `count` bytes from a file descriptor. If no data is available to read at the moment, blocks until there is. 
+Reads up to `count` bytes from a file descriptor. If no data is available to read at the moment, blocks until there is. Returns the amount of bytes read.
 
 ## [0x01] uint64_t sys_write(uint64_t fd, const char* buf, uint64_t count);
-Writes up to `count` bytes to a file descriptor.
+Writes up to `count` bytes to a file descriptor. Returns the amount of bytes written.
 
 ## [0x02] uint64_t sys_time();
 Returns a struct with the current system time in seconds, minutes, and hours.
 
-## [0x07] int sys_poll(uint64_t timeout_ms);
-Waits for data to become available to read using `sys_read(...)` on `STDIN`. Returns 1 if any data is available for reading, or -1 if the timeout expired.
+## [0x03] uint64_t sys_millis();
+Returns the amount of milliseconds elapsed since system startup.
 
-Passing a 0 or negative timeout will make `sys_poll(...)` return immediately even if there is no available data to read. Otherwise, it only ensures at least `timeout_ms` milliseconds have passed.
+## [0x07] uint64_t sys_pollread(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms);
+Same as `sys_read(...)` but returns prematurely if no data becomes available after the timeout expires.
+
+Passing a timeout of 0 will make `sys_pollread(...)` return immediately even if there is no available data to read. Otherwise, it only ensures at least `timeout_ms` milliseconds have passed.
 
 # Default file descriptors
 - [0] `STDIN`: Standard input

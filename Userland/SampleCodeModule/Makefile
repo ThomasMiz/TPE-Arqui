@@ -11,7 +11,7 @@ $(MODULE): $(SOURCES) $(OBJECTS_ASM)
 	$(GCC) $(GCCFLAGS) -I./include -T sampleCodeModule.ld _loader.c $(OBJECTS_ASM) $(SOURCES) -o ../$(MODULE)
 
 obj/%.asm.o : asm/%.asm
-	mkdir obj
+	mkdir -p obj
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 clean:
