@@ -18,6 +18,9 @@ Clears the screen console, putting it all to black and resetting the cursor to t
 ## [0x05] uint64_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, uint8_t color);
 Writes up to `count` characters into the console at the specified position with the specified color. Returns how many characters were written.
 
+## [0x06] uint64_t sys_screensize();
+Gets the width and height of the character matrix that is the console. Returns a 64 bit number, whose lower 32 bits are width and upper 32 bits height.
+
 ## [0x07] uint64_t sys_pollread(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms);
 Same as `sys_read(...)` but returns prematurely if no data becomes available after the timeout expires.
 

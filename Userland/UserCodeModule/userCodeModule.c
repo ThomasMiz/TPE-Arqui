@@ -33,7 +33,16 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 	return digits;
 }
 
+void getConsoleSize(uint32_t* width, uint32_t* height) {
+	uint64_t size = sys_screensize();
+	*width = size;
+	*height = (size >> 32);
+}
+
 int main() {
+
+	uint32_t width, height;
+	getConsoleSize(&width, &height);
 
 	sys_clearscreen();
 
@@ -44,6 +53,11 @@ int main() {
 	uint64_t lastmillis = 0;
 	char timebuf[32];
 	
+	uint32_t tmp = uintToBase(width, timebuf, 10);
+	sys_writeat(timebuf, tmp, 60, 0, 0x7F);
+	tmp = uintToBase(height, timebuf, 10);
+	sys_writeat(timebuf, tmp, 70, 0, 0x7F);
+
 	while (1) {
 		uint64_t readlen = sys_pollread(STDIN, readbuf, sizeof(readbuf)/sizeof(readbuf[0]), 1);
 		uint64_t millis = sys_millis();

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+uint32_t ncWidth();
+uint32_t ncHeight();
 void ncSetCursor(uint16_t x, uint16_t y);
 void ncPrint(const char* string);
 void ncPrintChar(char character);

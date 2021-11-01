@@ -30,6 +30,10 @@ uint64_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, ui
 	return count;
 }
 
+uint64_t sys_screensize() {
+	return ncWidth() | ((uint64_t)ncHeight() << 32);
+}
+
 uint64_t sys_pollread_handler(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms) {
 	// Any file descriptor that isnt STDIN or KBDIN gets ignored
 	if (fd != STDIN && fd != KBDIN)
@@ -55,7 +59,7 @@ uint64_t sys_read_handler(uint64_t fd, char* buf, uint64_t count) {
 }
 
 static uint64_t (*syscall_handlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8) = {
-	sys_read_handler, sys_write_handler, sys_time_handler, sys_millis_handler, sys_clearscreen, sys_writeat, 0, sys_pollread_handler
+	sys_read_handler, sys_write_handler, sys_time_handler, sys_millis_handler, sys_clearscreen, sys_writeat, sys_screensize, sys_pollread_handler
 };
 
 uint64_t syscallHandler(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {

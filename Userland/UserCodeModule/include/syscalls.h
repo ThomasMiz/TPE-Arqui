@@ -1,6 +1,8 @@
 #ifndef _SYSCALLS_H_
 #define _SYSCALLS_H_
 
+#include <stdint.h>
+
 #define STDIN 0
 #define STDOUT 1
 #define STDERR 2
@@ -12,6 +14,7 @@ uint64_t sys_time(void);
 uint64_t sys_millis(void);
 void sys_clearscreen(void);
 uint64_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, uint8_t color);
+uint64_t sys_screensize();
 uint64_t sys_pollread(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms);
 
 #endif

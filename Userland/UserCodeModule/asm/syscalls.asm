@@ -4,6 +4,7 @@ GLOBAL sys_time
 GLOBAL sys_millis
 GLOBAL sys_clearscreen
 GLOBAL sys_writeat
+GLOBAL sys_screensize
 GLOBAL sys_pollread
 
 section .text
@@ -36,6 +37,11 @@ sys_clearscreen:
 sys_writeat:
     mov rax, 0x05
     mov r10, rcx
+    int 80h
+    ret
+
+sys_screensize:
+    mov rax, 0x06
     int 80h
     ret
 
