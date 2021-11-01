@@ -12,6 +12,12 @@ Returns a struct with the current system time in seconds, minutes, and hours.
 ## [0x03] uint64_t sys_millis();
 Returns the amount of milliseconds elapsed since system startup.
 
+## [0x04] void sys_clearscreen();
+Clears the screen console, putting it all to black and resetting the cursor to the top left.
+
+## [0x05] uint64_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, uint8_t color);
+Writes up to `count` characters into the console at the specified position with the specified color. Returns how many characters were written.
+
 ## [0x07] uint64_t sys_pollread(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms);
 Same as `sys_read(...)` but returns prematurely if no data becomes available after the timeout expires.
 

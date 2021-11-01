@@ -8,6 +8,13 @@ static uint8_t * currentVideo = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
 static const uint32_t height = 25 ;
 
+void ncSetCursor(uint16_t x, uint16_t y) {
+	uint64_t offset = 2 * (x + y * width);
+	if (offset >= 2*width*height)
+		offset = 0;
+		currentVideo = video + offset;
+}
+
 void ncPrint(const char * string)
 {
 	int i;

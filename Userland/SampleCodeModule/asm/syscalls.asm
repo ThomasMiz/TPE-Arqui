@@ -2,6 +2,8 @@ GLOBAL sys_read
 GLOBAL sys_write
 GLOBAL sys_time
 GLOBAL sys_millis
+GLOBAL sys_clearscreen
+GLOBAL sys_writeat
 GLOBAL sys_pollread
 
 section .text
@@ -23,6 +25,17 @@ sys_time:
 
 sys_millis:
     mov rax, 0x03
+    int 80h
+    ret
+
+sys_clearscreen:
+    mov rax, 0x04
+    int 80h
+    ret
+
+sys_writeat:
+    mov rax, 0x05
+    mov r10, rcx
     int 80h
     ret
 
