@@ -13,13 +13,13 @@ Returns a struct with the current system time in seconds, minutes, and hours.
 Returns the amount of milliseconds elapsed since system startup.
 
 ## [0x04] void sys_clearscreen();
-Clears the screen console, putting it all to black and resetting the cursor to the top left.
+Clears the screen, putting it all to black and resetting the pen to the top left.
 
-## [0x05] uint64_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, uint8_t color);
-Writes up to `count` characters into the console at the specified position with the specified color. Returns how many characters were written.
+## [0x05] uint32_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, Color color);
+Writes up to `count` characters into the screen at the specified pixel position with the specified color. Returns the new pen position as a 32 bit number, where the 16 lowest bits are the x and the upper 16 bits are the y.
 
 ## [0x06] uint64_t sys_screensize();
-Gets the width and height of the character matrix that is the console. Returns a 64 bit number, whose lower 32 bits are width and upper 32 bits height.
+Gets the width and height of the screen in pixels. Returns a 64 bit number, whose lower 32 bits are width and upper 32 bits are the height.
 
 ## [0x07] uint64_t sys_pollread(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms);
 Same as `sys_read(...)` but returns prematurely if no data becomes available after the timeout expires.

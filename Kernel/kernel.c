@@ -1,8 +1,5 @@
 #include <stdint.h>
-#include <string.h>
-#include <lib.h>
 #include <moduleLoader.h>
-#include <naiveConsole.h>
 #include <idtLoader.h>
 
 extern uint8_t text;
@@ -37,72 +34,22 @@ void * getStackBase()
 void * initializeKernelBinary()
 {
 	char buffer[10];
-
-	ncPrint("[x64BareBones]");
-	ncNewline();
-
-	ncPrint("CPU Vendor:");
-	ncPrint(cpuVendor(buffer));
-	ncNewline();
-
-	ncPrint("[Loading modules]");
-	ncNewline();
 	void * moduleAddresses[] = {
 		userCodeModuleAddress,
 		userDataModuleAddress
 	};
 
 	loadModules(&endOfKernelBinary, moduleAddresses);
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
-
-	ncPrint("[Initializing kernel's binary]");
-	ncNewline();
-
 	clearBSS(&bss, &endOfKernel - &bss);
-
-	ncPrint("  text: 0x");
-	ncPrintHex((uint64_t)&text);
-	ncNewline();
-	ncPrint("  rodata: 0x");
-	ncPrintHex((uint64_t)&rodata);
-	ncNewline();
-	ncPrint("  data: 0x");
-	ncPrintHex((uint64_t)&data);
-	ncNewline();
-	ncPrint("  bss: 0x");
-	ncPrintHex((uint64_t)&bss);
-	ncNewline();
-
-	ncPrint("[Done]");
-	ncNewline();
-	ncNewline();
 	return getStackBase();
 }
 
 int main()
 {	
-	ncPrint("[Kernel Main]");
 	load_idt();
+
+	((EntryPoint)userCodeModuleAddress)();
 	
-	ncNewline();
-	ncPrint("  Sample code module at 0x");
-	ncPrintHex((uint64_t)userCodeModuleAddress);
-	ncNewline();
-	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)userCodeModuleAddress)());
-	ncNewline();
-	ncNewline();
-
-	ncPrint("  Sample data module at 0x");
-	ncPrintHex((uint64_t)userDataModuleAddress);
-	ncNewline();
-	ncPrint("  Sample data module contents: ");
-	ncPrint((char*)userDataModuleAddress);
-	ncNewline();
-
-	ncPrint("[Finished]");
-	while(1);
+	while(1) _hlt();
 	return 0;
 }

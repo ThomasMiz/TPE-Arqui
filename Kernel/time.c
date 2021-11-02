@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include <time.h>
-#include <naiveConsole.h>
 
 extern uint8_t getCurrentHours();
 extern uint8_t getCurrentMinutes();

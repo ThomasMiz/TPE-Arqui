@@ -35,8 +35,8 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 
 void getConsoleSize(uint32_t* width, uint32_t* height) {
 	uint64_t size = sys_screensize();
-	*width = size;
-	*height = (size >> 32);
+	*width = (size & 0xFFFFFFFF) / 9;
+	*height = (size >> 32) / 16;
 }
 
 int main() {
@@ -46,17 +46,17 @@ int main() {
 
 	sys_clearscreen();
 
-	unsigned int written = 0;
-
     char readbuf[32];
 	
 	uint64_t lastmillis = 0;
 	char timebuf[32];
+	uint32_t penpos = 16 * 0x10000;
 	
 	uint32_t tmp = uintToBase(width, timebuf, 10);
-	sys_writeat(timebuf, tmp, 60, 0, 0x7F);
+	Color color = {0x90, 0x90, 0x90};
+	sys_writeat(timebuf, tmp, 60, 0, color);
 	tmp = uintToBase(height, timebuf, 10);
-	sys_writeat(timebuf, tmp, 70, 0, 0x7F);
+	sys_writeat(timebuf, tmp, 70, 0, color);
 
 	while (1) {
 		uint64_t readlen = sys_pollread(STDIN, readbuf, sizeof(readbuf)/sizeof(readbuf[0]), 1);
@@ -64,14 +64,14 @@ int main() {
 		if (millis != lastmillis) {
 			lastmillis = millis;
 			uint32_t digits = uintToBase(millis, timebuf, 10);
-			sys_writeat(timebuf, digits, 0, 0, 0x7F);
+			sys_writeat(timebuf, digits, 0, 0, color);
 		}
 
 		if (readlen != 0) {
-			unsigned int x = written % 80;
-			unsigned int y = written / 80;
-			sys_writeat(readbuf, readlen, x, y+1, 0x7F);
-			written += readlen;
+			penpos = sys_writeat(readbuf, readlen, (penpos & 0xFFFF), (penpos >> 16), color);
+			penpos = sys_writeat(readbuf, readlen, (penpos & 0xFFFF), (penpos >> 16), color);
+			penpos = sys_writeat(readbuf, readlen, (penpos & 0xFFFF), (penpos >> 16), color);
+			penpos = sys_writeat(readbuf, readlen, (penpos & 0xFFFF), (penpos >> 16), color);
 		}
 	}
 	

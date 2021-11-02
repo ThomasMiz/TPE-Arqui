@@ -2,12 +2,12 @@
 #include <defs.h>
 #include <time.h>
 #include <interrupts.h>
-#include <naiveConsole.h>
 #include <keyboard.h>
+#include <video.h>
 
 uint64_t sys_write_handler(uint64_t fd, const char* buf, uint64_t count) {
 	for (int i = 0; i < count; i++)
-		ncPrintChar(buf[i]); // only for testing!! TODO: make this nice & check filedescriptor
+		scr_printChar(buf[i]); // only for testing!! TODO: make this nice & check filedescriptor
 	return count;
 }
 
@@ -20,18 +20,19 @@ uint64_t sys_millis_handler() {
 }
 
 void sys_clearscreen() {
-	ncClear(); // TODO: change to new console when implemented
+	scr_clear(); // TODO: change to new console when implemented
 }
 
-uint64_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, uint8_t color) {
-	ncSetCursor(x, y);
+uint32_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, Color color) {
+	scr_setPenPosition(x, y);
+	scr_setPenColor(color);
 	for (int i = 0; i < count; i++)
-		ncPrintChar(buf[i]);
-	return count;
+		scr_printChar(buf[i]);
+	return scr_getPenX() | ((uint32_t)scr_getPenY() << 16);
 }
 
 uint64_t sys_screensize() {
-	return ncWidth() | ((uint64_t)ncHeight() << 32);
+	return scr_getWidth() | ((uint64_t)scr_getHeight() << 32);
 }
 
 uint64_t sys_pollread_handler(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_ms) {
