@@ -75,8 +75,78 @@ void scr_clear(void) {
 }
 
 void scr_setPixel(uint16_t x, uint16_t y, Color color) {
+    if (x >= screenData->width || y >= screenData->height)
+        return;
+
     Color* pos = (Color*)getPtrToPixel(x, y);
     *pos = color;
+}
+
+void scr_drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color) {
+    if (x >= screenData->width || y >= screenData->height)
+        return;
+    
+    uint16_t maxWidth = screenData->width - x;
+    if (width > maxWidth) width = maxWidth;
+    
+    uint16_t maxHeight = screenData->height - y;
+    if (height > maxHeight) height = maxHeight;
+
+    Color* ptr = (Color*)getPtrToPixel(x, y);
+    unsigned int adv = screenData->width - width;
+    for (int i=0; i<height; i++) {
+        for (int c=0; c<width; c++)
+            *(ptr++) = color;
+        ptr += adv;
+    }
+}
+
+void scr_drawLine(uint16_t fromX, uint16_t fromY, uint16_t toX, uint16_t toY, Color color) {
+    unsigned int dx = toX < fromX ? (fromX - toX) : (toX - fromX);
+    unsigned int dy = toY < fromY ? (fromY - toY) : (toY - fromY);
+    
+    // Lines can be drawn by iterating either horizontally or vertically. We check which way is best by comparing dx and dy.
+    if (dy < dx) {
+        // We draw the line iterating horizontally.
+        // We ensure fromX < toX by swapping the points if necessary.
+        if (fromX > toX) {
+            uint16_t tmp = fromX;
+            fromX = toX;
+            toX = tmp;
+            tmp = fromY;
+            fromY = toY;
+            toY = tmp;
+        }
+
+        if (fromX >= screenData->width) return;
+
+        double m = (double)(toY - fromY) / (double)(toX - fromX);
+        double b = fromY - m*fromX;
+        if (toX >= screenData->width) toX = screenData->width - 1;
+
+        for (uint16_t x = fromX; x <= toX; x++)
+            scr_setPixel(x, (uint16_t)(m*x+b + 0.5), color);
+    } else {
+        // We draw the line iterating vertically.
+        // We ensure fromY < toY by swapping the points if necessary.
+        if (fromY > toY) {
+            uint16_t tmp = fromX;
+            fromX = toX;
+            toX = tmp;
+            tmp = fromY;
+            fromY = toY;
+            toY = tmp;
+        }
+
+        if (fromY >= screenData->height) return;
+
+        double m = (double)(toX - fromX) / (double)(toY - fromY);
+        double b = fromX - m*fromY;
+        if (toY >= screenData->height) toY = screenData->height - 1;
+
+        for (uint16_t y = fromY; y <= toY; y++)
+            scr_setPixel((uint16_t)(m*y+b + 0.5), y, color);
+    }
 }
 
 void scr_setPenPosition(uint16_t x, uint16_t y) {

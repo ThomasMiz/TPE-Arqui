@@ -6,6 +6,9 @@ GLOBAL sys_clearscreen
 GLOBAL sys_writeat
 GLOBAL sys_screensize
 GLOBAL sys_pollread
+GLOBAL sys_drawpoint
+GLOBAL sys_drawrect
+GLOBAL sys_drawline
 
 section .text
 
@@ -48,5 +51,22 @@ sys_screensize:
 sys_pollread:
     mov rax, 0x07
     mov r10, rcx ; fourth integer param in C is in RCX, but we need to pass it through R10.
+    int 80h
+    ret
+
+sys_drawpoint:
+    mov rax, 0x08
+    int 80h
+    ret
+
+sys_drawrect:
+    mov rax, 0x09
+    mov r10, rcx
+    int 80h
+    ret
+
+sys_drawline:
+    mov rax, 0x0A
+    mov r10, rcx
     int 80h
     ret

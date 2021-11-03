@@ -32,6 +32,10 @@ void scr_clear(void);
 /* Sets the color of a specific pixel on the screen. */
 void scr_setPixel(uint16_t x, uint16_t y, Color color);
 
+/* Sets a specified rectangle of pixels on the screen to the specified color. */
+void scr_drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color);
+
+void scr_drawLine(uint16_t fromX, uint16_t fromY, uint16_t toX, uint16_t toY, Color color);
 
 
 /* Sets the pen position for drawing characters on the screen as a console. */

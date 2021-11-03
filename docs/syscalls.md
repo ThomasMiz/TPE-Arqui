@@ -26,6 +26,15 @@ Same as `sys_read(...)` but returns prematurely if no data becomes available aft
 
 Passing a timeout of 0 will make `sys_pollread(...)` return immediately even if there is no available data to read. Otherwise, it only ensures at least `timeout_ms` milliseconds have passed.
 
+## [0x08] void sys_drawpoint(uint16_t x, uint16_t y, Color color);
+Draws a single pixel onto the screen at the specified position.
+
+## [0x09] void sys_drawrect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color);
+Draws a rectangle of pixels onto the screen.
+
+## [0x0A] void sys_drawline(uint16_t fromX, uint16_t fromY, uint16_t toX, uint16_t toY, Color color);
+Draws a line between two pixels on the screen.
+
 # Default file descriptors
 - [0] `STDIN`: Standard input
 - [1] `STDOUT`: Standard output
