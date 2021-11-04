@@ -103,8 +103,8 @@ void exceptionHandler(uint64_t code, const uint64_t regdata[17]) {
     }
 
     // We wait for 5 seconds to prevent the user from accidentally exiting before seeing the error.
-    uint64_t start_ms = getElapsedMilliseconds();
-    do { _hlt(); } while (getElapsedMilliseconds() - start_ms < 5000);
+    uint64_t start_ms = rtc_getElapsedMilliseconds();
+    do { _hlt(); } while (rtc_getElapsedMilliseconds() - start_ms < 5000);
 
     kbd_clearBuffer();
     scr_print("\nPress any key to restart.");

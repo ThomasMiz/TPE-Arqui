@@ -1,10 +1,12 @@
-GLOBAL getCurrentHours
-GLOBAL getCurrentMinutes
-GLOBAL getCurrentSeconds
-GLOBAL getCurrentDay
-GLOBAL getCurrentMonth
-GLOBAL getCurrentYear
-getCurrentHours:
+GLOBAL rtc_getCurrentHours
+GLOBAL rtc_getCurrentMinutes
+GLOBAL rtc_getCurrentSeconds
+GLOBAL rtc_getCurrentDay
+GLOBAL rtc_getCurrentMonth
+GLOBAL rtc_getCurrentYear
+
+section .text
+rtc_getCurrentHours:
     cli
     mov al, 0x0B
     out 70h, al
@@ -18,7 +20,7 @@ getCurrentHours:
     sti
     ret
 
-getCurrentMinutes:
+rtc_getCurrentMinutes:
     cli
     mov al, 0x0B
     out 70h, al
@@ -33,7 +35,7 @@ getCurrentMinutes:
 
     ret
 
-getCurrentSeconds:
+rtc_getCurrentSeconds:
     cli
     mov al, 0x0B
     out 70h, al
@@ -48,7 +50,7 @@ getCurrentSeconds:
 
     ret
 
-getCurrentDay:
+rtc_getCurrentDay:
     cli
     mov al, 0x0B
     out 70h, al
@@ -63,7 +65,7 @@ getCurrentDay:
 
     ret
 
-getCurrentMonth:
+rtc_getCurrentMonth:
     cli
     mov al, 0x0B
     out 70h, al
@@ -78,7 +80,7 @@ getCurrentMonth:
 
     ret
 
-getCurrentYear:
+rtc_getCurrentYear:
     cli
     mov al, 0x0B
     out 70h, al

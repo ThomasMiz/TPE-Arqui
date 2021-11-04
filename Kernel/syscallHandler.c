@@ -12,15 +12,15 @@ uint64_t sys_write_handler(uint64_t fd, const char* buf, uint64_t count) {
 }
 
 uint64_t sys_time_handler() {
-	return getCurrentTime();
+	return rtc_getCurrentTime();
 }
 
 uint64_t sys_date_handler() {
-	return getCurrentDate();
+	return rtc_getCurrentDate();
 }
 
 uint64_t sys_millis_handler() {
-	return getElapsedMilliseconds();
+	return rtc_getElapsedMilliseconds();
 }
 
 void sys_clearscreen_handler() {
@@ -49,11 +49,11 @@ uint64_t sys_pollread_handler(uint64_t fd, char* buf, uint64_t count, uint64_t t
 
 	if (timeout_ms != 0) {
 		// We block until data was read or the timeout expires
-		uint64_t start_ms = getElapsedMilliseconds();
+		uint64_t start_ms = rtc_getElapsedMilliseconds();
 		do {
 			_hlt();
 			totalRead += (fd == STDIN ? kbd_readCharacters(buf + totalRead, count - totalRead) : kbd_readScancodes(buf + totalRead, count - totalRead));
-		} while (totalRead == 0 && (getElapsedMilliseconds() - start_ms) < timeout_ms);
+		} while (totalRead == 0 && (rtc_getElapsedMilliseconds() - start_ms) < timeout_ms);
 	}
 
 	return totalRead;

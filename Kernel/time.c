@@ -1,12 +1,12 @@
 #include <stdint.h>
 #include <time.h>
 
-extern uint8_t getCurrentHours();
-extern uint8_t getCurrentMinutes();
-extern uint8_t getCurrentSeconds();
-extern uint8_t getCurrentDay();
-extern uint8_t getCurrentMonth();
-extern uint8_t getCurrentYear();
+extern uint8_t rtc_getCurrentHours();
+extern uint8_t rtc_getCurrentMinutes();
+extern uint8_t rtc_getCurrentSeconds();
+extern uint8_t rtc_getCurrentDay();
+extern uint8_t rtc_getCurrentMonth();
+extern uint8_t rtc_getCurrentYear();
 
 static uint64_t ticks;
 
@@ -14,22 +14,22 @@ void timerIntHandler(void) {
     ticks++;
 }
 
-uint64_t getElapsedTicks() {
+uint64_t rtc_getElapsedTicks() {
     return ticks;
 }
 
-uint64_t getElapsedSeconds() {
+uint64_t rtc_getElapsedSeconds() {
     return TICKS_TO_SECONDS(ticks);
 }
 
-uint64_t getElapsedMilliseconds() {
+uint64_t rtc_getElapsedMilliseconds() {
     return TICKS_TO_MILLISECONDS(ticks);
 }
 
-uint64_t getCurrentTime() {
-    return getCurrentHours() | ((uint64_t)getCurrentMinutes() << 8) | ((uint64_t)getCurrentSeconds() << 16);
+uint64_t rtc_getCurrentTime() {
+    return rtc_getCurrentHours() | ((uint64_t)rtc_getCurrentMinutes() << 8) | ((uint64_t)rtc_getCurrentSeconds() << 16);
 }
 
-uint64_t getCurrentDate() {
-    return getCurrentDay() | ((uint64_t)getCurrentMonth() << 8) | ((uint64_t)getCurrentYear() << 16);
+uint64_t rtc_getCurrentDate() {
+    return rtc_getCurrentDay() | ((uint64_t)rtc_getCurrentMonth() << 8) | ((uint64_t)rtc_getCurrentYear() << 16);
 }
