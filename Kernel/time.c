@@ -4,14 +4,11 @@
 extern uint8_t getCurrentHours();
 extern uint8_t getCurrentMinutes();
 extern uint8_t getCurrentSeconds();
+extern uint8_t getCurrentDay();
+extern uint8_t getCurrentMonth();
+extern uint8_t getCurrentYear();
 
 static uint64_t ticks;
-
-typedef struct {
-    uint8_t seconds;
-    uint8_t minutes;
-    uint8_t hours;
-} Time;
 
 void timerIntHandler(void) {
     ticks++;
@@ -29,7 +26,10 @@ uint64_t getElapsedMilliseconds() {
     return TICKS_TO_MILLISECONDS(ticks);
 }
 
-Time getActualTime() {
-    Time time = {getCurrentSeconds(), getCurrentMinutes(), getCurrentHours()};
-    return time;
+uint64_t getCurrentTime() {
+    return getCurrentHours() | ((uint64_t)getCurrentMinutes() << 8) | ((uint64_t)getCurrentSeconds() << 16);
+}
+
+uint64_t getCurrentDate() {
+    return getCurrentDay() | ((uint64_t)getCurrentMonth() << 8) | ((uint64_t)getCurrentYear() << 16);
 }

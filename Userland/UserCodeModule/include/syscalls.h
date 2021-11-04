@@ -22,6 +22,7 @@ typedef struct {
 uint64_t sys_read(uint64_t fd, char* buf, uint64_t count);
 uint64_t sys_write(uint64_t fd, const char* buf, uint64_t count);
 uint64_t sys_time(void);
+uint64_t sys_date(void);
 uint64_t sys_millis(void);
 void sys_clearscreen(void);
 uint32_t sys_writeat(const char* buf, uint64_t count, uint16_t x, uint16_t y, Color color);

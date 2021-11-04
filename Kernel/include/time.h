@@ -6,6 +6,7 @@
 #define TICKS_TO_SECONDS(x) ((x) * 5 / 91)
 #define TICKS_TO_MILLISECONDS(x) ((x) * 5000 / 91);
 
+
 /* Gets the total amount of ticks elapsed since startup. */
 uint64_t getElapsedTicks();
 
@@ -14,5 +15,11 @@ uint64_t getElapsedSeconds();
 
 /* Gets the total amount of milliseconds elapsed since startup. */
 uint64_t getElapsedMilliseconds();
+
+/* Gets the current time */
+uint64_t getCurrentTime();
+
+/* Gets today's date */
+uint64_t getCurrentDate();
 
 #endif

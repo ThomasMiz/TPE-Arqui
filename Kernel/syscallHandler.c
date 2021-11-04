@@ -12,7 +12,11 @@ uint64_t sys_write_handler(uint64_t fd, const char* buf, uint64_t count) {
 }
 
 uint64_t sys_time_handler() {
-	return getActualTime();
+	return getCurrentTime();
+}
+
+uint64_t sys_date_handler() {
+	return getCurrentDate();
 }
 
 uint64_t sys_millis_handler() {
@@ -74,7 +78,7 @@ void sys_drawline_handler(uint16_t fromX, uint16_t fromY, uint16_t toX, uint16_t
 static uint64_t (*syscall_handlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8) = {
 	sys_read_handler, sys_write_handler, sys_time_handler, sys_millis_handler, sys_clearscreen_handler,
 	sys_writeat_handler, sys_screensize_handler, sys_pollread_handler, sys_drawpoint_handler, sys_drawrect_handler,
-	sys_drawline_handler
+	sys_drawline_handler, sys_date_handler
 };
 
 uint64_t syscallHandler(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {

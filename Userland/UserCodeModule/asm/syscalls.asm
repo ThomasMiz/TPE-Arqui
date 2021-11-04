@@ -9,6 +9,7 @@ GLOBAL sys_pollread
 GLOBAL sys_drawpoint
 GLOBAL sys_drawrect
 GLOBAL sys_drawline
+GLOBAL sys_date
 
 section .text
 
@@ -67,6 +68,12 @@ sys_drawrect:
 
 sys_drawline:
     mov rax, 0x0A
+    mov r10, rcx
+    int 80h
+    ret
+
+sys_date:
+    mov rax, 0x0B
     mov r10, rcx
     int 80h
     ret
