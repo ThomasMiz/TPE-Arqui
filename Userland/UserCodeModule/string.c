@@ -73,3 +73,12 @@ uint64_t itoa(uint64_t number, char* s) {
 	
 	return digits;
 }
+
+void uint64ToHex(uint64_t n, char buf[16]) {
+    int i=15;
+    do {
+        int digit = n % 16;
+        buf[i] = (digit < 10 ? '0' : ('A' - 10)) + digit;
+        n /= 16;
+    } while(i-- != 0);
+}

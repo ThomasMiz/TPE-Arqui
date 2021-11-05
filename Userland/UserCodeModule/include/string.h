@@ -12,6 +12,10 @@ int strncmp(const char* str1, const char* str2, uint64_t n);
 char* strcpy(char* dest, const char* src);
 char* strncpy(char* dest, const char* src, uint64_t n);
 uint64_t strlen(const char* s);
+
 uint64_t itoa(uint64_t number, char* s);
+
+/* Converts a uint64_t into a 16-char hexadecimal number. */
+void uint64ToHex(uint64_t n, char buf[16]);
 
 #endif

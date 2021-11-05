@@ -2,6 +2,7 @@
 #define _COREUTIL_H_
 
 #include <stdint.h>
+#include <color.h>
 
 #define UP 0x48
 #define DOWN 0x50
@@ -12,5 +13,11 @@
 
 char scancodeToAscii(char scancode);
 
-void uint64ToHex(uint64_t n, char buf[16]);
+void getScreenSize(uint32_t* width, uint32_t* height);
+
+void clearscreen(void);
+void print(const char* buf, uint64_t count, Color color);
+char getChar(void);
+void scanf(char* readbuf, uint64_t maxLen);
+
 #endif

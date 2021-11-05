@@ -13,17 +13,6 @@
 #define READBUF_LENGTH 32
 
 uint32_t width, height;
-static uint32_t penpos = 0;
-
-static void getScreenSize(uint32_t* width, uint32_t* height) {
-	uint64_t size = sys_screensize();
-	*width = (size & 0xFFFFFFFF);
-	*height = (size >> 32);
-}
-
-static void print(const char* buf, uint64_t count, Color color) {
-	penpos = sys_writeat(buf, count, (penpos & 0xFFFF), (penpos >> 16), color);
-}
 
 static void help() {
 	const char* helpstring = 
@@ -88,7 +77,7 @@ static void printMem() {
 }
 
 void divideAndConquer() {
-	sys_clearscreen();
+	clearscreen();
 	sys_drawline(width/2, 0, width/2, height, magenta); //vertical line
 	sys_drawline(0, height/3, width, height/3, magenta); //horizontal line
 	sys_writeat("Press ESC to exit.",18,CHAR_WIDTH,0,gray);
@@ -127,18 +116,18 @@ void divideAndConquer() {
 				hang_update(ascii);
 			}
 			else if(ascii==27) {
-				sys_clearscreen();
-				penpos = 0;
+				clearscreen();
 				break;
 			}
 		}
 	}
+
+	clearscreen();
 }
 
 static void fractal() {
 	frc_run();
-	sys_clearscreen();
-	penpos = 0;
+	clearscreen();
 }
 
 static const char* commands[] = {"divideandconquer", "dividebyzero", "fractal", "help", "inforeg", "invalidopcode", "printmem", "time"};
@@ -159,49 +148,16 @@ static char indexCommand(char* readbuf) {
 	return -1;
 }
 
-static void scanCommand(char* readbuf, uint8_t maxLen) {
-	char * p = readbuf;
-	char i = 0;
-	char maxLenReached = 0;
-
-	while(1) {
-		if(i == maxLen) {
-			i = 0;
-			maxLenReached = 1;
-		}
-
-		uint64_t readlen = sys_pollread(STDIN, &p[i], maxLen-i, 1);
-
-		if(readlen != 0) {
-			print(&p[i], readlen, gray);
-		}
-		
-		i += readlen;
-
-		for(int j=i-readlen; j<i; j++) {
-			if(p[j] =='\n') {
-				if(maxLenReached == 0) {
-					p[j] = 0;
-				}
-				else {
-					p[0] = 0;
-				}
-				return;
-			}
-		}
-	}
-}
-
 int main() {
 	getScreenSize(&width, &height);
 
-	sys_clearscreen();	
+	clearscreen();	
 	
 	print("$ ", 2, magenta);
 
 	while(1) {
 		char readbuf[READBUF_LENGTH] = {0};
-		scanCommand(readbuf,READBUF_LENGTH);
+		scanf(readbuf,READBUF_LENGTH);
 		char index;
 		if((index = indexCommand(readbuf))>=0) {
 			commands_functions[index]();
