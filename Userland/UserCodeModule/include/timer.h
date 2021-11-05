@@ -1,3 +1,3 @@
 #include <stdint.h>
 
-void updateTimer(uint64_t millis);
+void timer_update(uint64_t millis);

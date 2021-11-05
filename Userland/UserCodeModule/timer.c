@@ -10,7 +10,7 @@ extern uint32_t width, height;
 #define HEIGHT CHAR_HEIGHT
 #define LENGTH TIME_LENGTH+1
 
-void updateTimer(uint64_t millis) {
+void timer_update(uint64_t millis) {
     char timebuf[TIME_LENGTH+1];
     getTime(timebuf);
     sys_drawrect(POSX, POSY, WIDTH, HEIGHT, black);

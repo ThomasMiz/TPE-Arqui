@@ -1,7 +1,7 @@
-void updateStopwatch(uint64_t millis);
+void stw_update(uint64_t millis);
 
-void changeStatusStopwatch(uint64_t millis);
+void stw_changeStatus(uint64_t millis);
 
-void initStopwatch();
+void stw_init();
 
-void stopStopwatch();
+void stw_stop();

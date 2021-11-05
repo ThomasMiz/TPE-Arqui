@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void initHangman();
-void updateHangman(char ascii);
+void hang_init();
+void hang_update(char ascii);
 
 #endif

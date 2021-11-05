@@ -78,7 +78,7 @@ static uint8_t check(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize, uint8_
     return 1;
 }
 
-static uint8_t isValidSudoku(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize) {
+static uint8_t isValid(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize) {
     uint8_t checked = 1;
     for (int i = 0; i < boardSize; i++) {
         for (int j = 0; j < boardSize; j++){
@@ -105,14 +105,14 @@ static uint8_t isValidSudoku(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize
     return checked;
 }
 
-static void updateCellSudoku(uint8_t row, uint8_t column, Color color) {
+static void updateCell(uint8_t row, uint8_t column, Color color) {
     sys_drawrect(VERTICALX+CHAR_WIDTH*(column*2+1+(int)column/3),HORIZONTALY+CHAR_HEIGHT*(row*2+1+(int)row/3),CHAR_WIDTH,CHAR_HEIGHT,black);
     sys_writeat(&currentSudoku[row][column].value, 1, 
                 VERTICALX+CHAR_WIDTH*(column*2+1+(int)column/3), 
                 HORIZONTALY+CHAR_HEIGHT*(row*2+1+(int)row/3),color);
 }
 
-static void drawFrameSudoku() {
+static void drawFrame() {
     sys_drawrect(VERTICALX, VERTICALFROMY,CHAR_WIDTH*21, CHAR_HEIGHT*21, black);
     for(int i=0; i<4; i++) {
         sys_drawline(VERTICALX+(CHAR_WIDTH*i*7), VERTICALFROMY, VERTICALX+(CHAR_WIDTH*i*7), VERTICALTOY, blue);
@@ -120,16 +120,16 @@ static void drawFrameSudoku() {
     }
 }
 
-static void drawNumbersSudoku(Cell sudoku[9][9]) {
+static void drawNumbers(Cell sudoku[9][9]) {
     for(int i=0; i<SUDOKU_SIZE; i++) {
         for(int j=0; j<SUDOKU_SIZE; j++) {
-            updateCellSudoku(i,j,sudoku[i][j].color);    
+            updateCell(i,j,sudoku[i][j].color);    
         }
     }
 }
 
-void initSudoku() {
-    drawFrameSudoku();
+void sdk_init() {
+    drawFrame();
 
     sys_writeat("Press 1 for easy, 2 for normal or 3 for extreme mode.", 53, width/2+CHAR_WIDTH, height-CHAR_HEIGHT*3, gray);
     sys_writeat("Press arrows to move around the board.", 38, width/2+CHAR_WIDTH, height-CHAR_HEIGHT*2, gray);
@@ -141,17 +141,17 @@ void initSudoku() {
     lastSelectedColumn = 0;
 }
 
-static void youWinSudoku() {
+static void win() {
     for(int i=0; i<SUDOKU_SIZE; i++) {
         for(int j=0; j<SUDOKU_SIZE; j++) {
             currentSudoku[i][j].color = green;
-            updateCellSudoku(i,j,currentSudoku[i][j].color);
+            updateCell(i,j,currentSudoku[i][j].color);
         }
     }
     isRunning = 0;
 }
 
-void updateSudoku(char number) {
+void sdk_update(char number) {
     if(isRunning==0 && number>='1' && number<='3') {
         isRunning = 1;
         char* p;
@@ -177,22 +177,22 @@ void updateSudoku(char number) {
                     
             }
         }
-        drawNumbersSudoku(currentSudoku);
-        updateCellSudoku(selectedRow, selectedColumn, yellow);
+        drawNumbers(currentSudoku);
+        updateCell(selectedRow, selectedColumn, yellow);
     }
     else{
         if(!currentSudoku[selectedRow][selectedColumn].isBlocked) {
             currentSudoku[selectedRow][selectedColumn].value = number;
-            if(isValidSudoku(currentSudoku,SUDOKU_SIZE))
-                 youWinSudoku(); 
+            if(isValid(currentSudoku,SUDOKU_SIZE))
+                 win(); 
             else
-                drawNumbersSudoku(currentSudoku);
+                drawNumbers(currentSudoku);
         }
     }
 }
 
 
-void changeCellSudoku(uint8_t scancode) {
+void sdk_move(uint8_t scancode) {
     if(!isRunning) {
         lastSelectedRow = selectedRow;
         lastSelectedColumn = selectedColumn;
@@ -209,8 +209,8 @@ void changeCellSudoku(uint8_t scancode) {
         if(scancode == RIGHT) {
             selectedColumn = MIN(8, selectedColumn+1);
         } 
-        updateCellSudoku(lastSelectedRow, lastSelectedColumn, currentSudoku[lastSelectedRow][lastSelectedColumn].color);
+        updateCell(lastSelectedRow, lastSelectedColumn, currentSudoku[lastSelectedRow][lastSelectedColumn].color);
 
-        updateCellSudoku(selectedRow, selectedColumn, yellow);
+        updateCell(selectedRow, selectedColumn, yellow);
     }
 }

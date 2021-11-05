@@ -15,3 +15,13 @@ static char scancodeToAsciiTable[] = {
 char scancodeToAscii(char scancode) {
     return scancode < SCANCODE_ARR_LENGTH ? scancodeToAsciiTable[scancode] : 0;
 }
+
+/* Converts a uint64_t into a 16-char hexadecimal number. */
+void uint64ToHex(uint64_t n, char buf[16]) {
+    int i=15;
+    do {
+        int digit = n % 16;
+        buf[i] = (digit < 10 ? '0' : ('A' - 10)) + digit;
+        n /= 16;
+    } while(i-- != 0);
+}

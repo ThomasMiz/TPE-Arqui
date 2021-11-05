@@ -12,4 +12,5 @@
 
 char scancodeToAscii(char scancode);
 
+void uint64ToHex(uint64_t n, char buf[16]);
 #endif

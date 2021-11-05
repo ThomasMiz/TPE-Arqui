@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-void initSudoku();
-void changeCellSudoku(uint8_t scancode);
-void updateSudoku(char number);
+void sdk_init();
+void sdk_move(uint8_t scancode);
+void sdk_update(char number);
 
 #endif

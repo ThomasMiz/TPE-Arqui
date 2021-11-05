@@ -19,7 +19,7 @@ static uint8_t cantUsedLetters;
 #define POSYWORD (5*height/6)
 #define POSXWORD ((width/2-(wordLength*2-1)*CHAR_WIDTH)/2)
 
-static void youLoseHangman() {
+static void lose() {
     sys_writeat("You Lose",8,(width/2-8*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, red);
     isRunning = 0;
     for(int i=0; i<wordLength; i++) {
@@ -28,12 +28,12 @@ static void youLoseHangman() {
     }
 }
 
-static void youWinHangman() {
+static void win() {
         sys_writeat("You Win",7,(width/2-7*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, green);
     isRunning = 0;
 }
 
-static void (*lives_actions[])(void) = {youLoseHangman, drawSteveRightLeg, drawSteveLeftLeg, drawSteveRightArm, drawSteveLeftArm, drawSteveTorso, drawSteveHead};
+static void (*lives_actions[])(void) = {lose, drawSteveRightLeg, drawSteveLeftLeg, drawSteveRightArm, drawSteveLeftArm, drawSteveTorso, drawSteveHead};
 
 static void printLives() {
     sys_drawrect((width/2-8*CHAR_WIDTH)/2+7*CHAR_WIDTH,POSYWORD+2*CHAR_HEIGHT,CHAR_WIDTH,CHAR_HEIGHT, black);
@@ -42,7 +42,7 @@ static void printLives() {
     sys_writeat(&liv,1,(width/2-8*CHAR_WIDTH)/2+7*CHAR_WIDTH,POSYWORD+2*CHAR_HEIGHT, green);
 }
 
-void initHangman() {
+void hang_init() {
     word = words[sys_millis() % 6];
     wordLength = strlen(word);
     lives = 7;
@@ -66,7 +66,7 @@ void initHangman() {
     }
 }
 
-void updateHangman(char letter) {
+void hang_update(char letter) {
     if(isRunning) {
         if(!usedLetters[letter-'a']) {
             usedLetters[letter-'a'] = 1;
@@ -82,7 +82,7 @@ void updateHangman(char letter) {
             }
             rightLetters += letterAppears;
             if(rightLetters == wordLength)
-                youWinHangman();
+                win();
 
             if(!letterAppears) {
                 lives--;
@@ -92,5 +92,5 @@ void updateHangman(char letter) {
         }
     }
     else
-        initHangman();
+        hang_init();
 }

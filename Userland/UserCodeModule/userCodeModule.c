@@ -65,16 +65,6 @@ static const char* registerNames[18] = {
     "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
 };
 
-/* Converts a uint64_t into a 16-char hexadecimal number. */
-static void uint64ToHex(uint64_t n, char buf[16]) {
-    int i=15;
-    do {
-        int digit = n % 16;
-        buf[i] = (digit < 10 ? '0' : ('A' - 10)) + digit;
-        n /= 16;
-    } while(i-- != 0);
-}
-
 static void inforeg() {
 	const uint64_t* regdata = dumpRegisters();
 	char buf[18];
@@ -101,9 +91,10 @@ void divideAndConquer() {
 	sys_clearscreen();
 	sys_drawline(width/2, 0, width/2, height, magenta); //vertical line
 	sys_drawline(0, height/3, width, height/3, magenta); //horizontal line
-	initStopwatch();
-	initSudoku();
-	initHangman();
+	sys_writeat("Press ESC to exit.",18,CHAR_WIDTH,0,gray);
+	stw_init();
+	sdk_init();
+	hang_init();
 
 	char readbuf[1];
 	uint64_t lastmillis = 0;
@@ -114,26 +105,26 @@ void divideAndConquer() {
 
 		if(millis != lastmillis) {
 			lastmillis = millis;
-			updateTimer(millis);
-			updateStopwatch(millis);
+			timer_update(millis);
+			stw_update(millis);
 		}
 
 		if(readlen != 0) {	
 			char ascii = scancodeToAscii(readbuf[0]);
 			if(ascii == ' ') {
-				changeStatusStopwatch(millis);
+				stw_changeStatus(millis);
 			}
 			else if(ascii == '\t') {
-				stopStopwatch();
+				stw_stop();
 			}
 			else if(readbuf[0] == UP || readbuf[0] == DOWN || readbuf[0] == LEFT || readbuf[0] == RIGHT) {
-				changeCellSudoku(readbuf[0]);
+				sdk_move(readbuf[0]);
 			}
 			else if(ascii>48 && ascii<58) {
-				updateSudoku(ascii);
+				sdk_update(ascii);
 			}
 			else if(ascii>='a' && ascii<='z') {
-				updateHangman(ascii);
+				hang_update(ascii);
 			}
 			else if(ascii==27) {
 				sys_clearscreen();
