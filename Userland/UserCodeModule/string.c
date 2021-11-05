@@ -54,7 +54,7 @@ uint64_t strlen(const char* s) {
     return l;
 }
 
-int itoa(int number, char* s) {
+uint64_t itoa(uint64_t number, char* s) {
     int digits = 1;
 	for (int n=number/10; n != 0; digits++, n /= 10);
 

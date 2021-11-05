@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <fractal.h>
 #include <syscalls.h>
+#include <color.h>
 
 #define MAX_ITERATIONS 300
 
@@ -80,6 +81,7 @@ static PixelCell cells[PIXELCOUNT]; // 12.75MBs of RAM. Ouch.
 
 void frc_run(void) {
     sys_clearscreen();
+    sys_writeat("Press ESC at any moment to abort.", 33, 0, 0, white);
     memclr((void*)cells, PIXELCOUNT * sizeof(PixelCell));
     setInitialState(cells, WIDTH, HEIGHT, PIXELCOUNT);
 
@@ -104,14 +106,13 @@ void frc_run(void) {
         if ((readlen = sys_pollread(KBDIN, readbuf, sizeof(readbuf), 0)) != 0) {
             do {
                 readlen--;
-                if (readbuf[readlen] != 1) // check for scancode for pressing down the ESC key.
-                    return; // Stop this program.
+                if (readbuf[readlen] == (uint8_t)1) // check for scancode for pressing down the ESC key.
+                    iteration = MAX_ITERATIONS; // Stop the for loop.
             } while (readlen != 0);
         }
     }
 
     // Show "done" message.
-    Color white = { 0xFF, 0xFF, 0xFF };
     sys_writeat("Done. Press ESC to exit.", 24, 50, 50, white);
 
     // Wait until we read the scancode for pressing down the ESC key.

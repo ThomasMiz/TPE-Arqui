@@ -12,6 +12,6 @@ int strncmp(const char* str1, const char* str2, uint64_t n);
 char* strcpy(char* dest, const char* src);
 char* strncpy(char* dest, const char* src, uint64_t n);
 uint64_t strlen(const char* s);
-int itoa(int number, char* s);
+uint64_t itoa(uint64_t number, char* s);
 
 #endif

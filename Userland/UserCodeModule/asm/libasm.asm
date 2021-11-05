@@ -4,7 +4,7 @@ GLOBAL runInvalidOpcode
 section .text
 
 runInvalidOpcode:
-	db	0xFF
+	db	0xFF, 0xFF
 	ret ; Necessary? Not really... Just here for good measure.
 
 dumpRegisters:
