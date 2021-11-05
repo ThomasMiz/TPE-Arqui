@@ -4,5 +4,6 @@
 #include <stdint.h>
 
 void initHangman();
+void updateHangman(char ascii);
 
 #endif

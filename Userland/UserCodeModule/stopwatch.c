@@ -33,8 +33,8 @@ void changeStatusStopwatch(uint64_t millis) {
 
 void initStopwatch() {
     sys_writeat("00:00:00:0", LENGTH, POSX, POSY, green);
-    sys_writeat("Space to stop or resume the timer.\n",35,width/2+CHAR_WIDTH,height/3-CHAR_HEIGHT*2, gray);
-    sys_writeat("Tab to restart it.",18,width/2+CHAR_WIDTH,height/3-CHAR_HEIGHT, gray);
+    sys_writeat("Press space to stop or resume the timer.", 40, width/2+CHAR_WIDTH, height/3-CHAR_HEIGHT*2, gray);
+    sys_writeat("Press tab to restart it.", 24, width/2+CHAR_WIDTH, height/3-CHAR_HEIGHT, gray);
 }
 
 void stopStopwatch() {

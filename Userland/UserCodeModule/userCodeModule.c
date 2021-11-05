@@ -97,6 +97,9 @@ void divideAndConquer() {
 			else if(ascii>48 && ascii<58) {
 				updateSudoku(ascii);
 			}
+			else if(ascii>='a' && ascii<='z') {
+				updateHangman(ascii);
+			}
 		}
 	}
 }

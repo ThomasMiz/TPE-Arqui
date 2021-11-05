@@ -33,4 +33,4 @@ dumpRegisters:
     ret
 
 section .bss
-regdata	resq	16	; reserve space for 17 qwords (one for each register we want to show inforeg).
+regdata	resq	16	; reserve space for 16 qwords (one for each register we want to show inforeg).
