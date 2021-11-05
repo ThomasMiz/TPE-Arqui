@@ -23,6 +23,7 @@ static void help() {
 	}
 
 	const char* helpstring = 
+	"CLEAR                Clears the console.\n"
 	"DIVIDEANDCONQUER     The screen will be divided into four windows with the following functions:\n"
 	".                    1) The time will be displayed in hh:mm:ss format permanently updating.\n"
 	".                    2) In another window there will be a stopwatch with tenths of a second to be\n"
@@ -137,8 +138,12 @@ static void fractal() {
 	clearscreen();
 }
 
-static const char* commands[] = {"divideandconquer", "dividebyzero", "fractal", "help", "inforeg", "invalidopcode", "printmem", "time"};
-static void (*commands_functions[])(void) = {divideAndConquer, divideByZero, fractal, help, inforeg, invalidOPCode, printMem, time};
+static void clear() {
+	clearscreen();
+}
+
+static const char* commands[] = {"clear", "divideandconquer", "dividebyzero", "fractal", "help", "inforeg", "invalidopcode", "printmem", "time"};
+static void (*commands_functions[])(void) = {clear, divideAndConquer, divideByZero, fractal, help, inforeg, invalidOPCode, printMem, time};
 #define COMMANDS_LENGTH (sizeof(commands)/sizeof(commands[0]))
 
 static char indexCommand(char* readbuf) {
@@ -159,6 +164,7 @@ int main() {
 	getScreenSize(&width, &height);
 
 	clearscreen();	
+	print("Welcome to Shell! Type \"HELP\" for a list of commands.\n\n", 55, green);
 
 	while(1) {
 		print("$ ", 2, magenta);

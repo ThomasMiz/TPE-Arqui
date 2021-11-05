@@ -16,6 +16,7 @@ char scancodeToAscii(char scancode);
 void getScreenSize(uint32_t* width, uint32_t* height);
 
 void clearscreen(void);
+void putchar(char c);
 void print(const char* buf, uint64_t count, Color color);
 char getChar(void);
 void scanf(char* readbuf, uint64_t maxLen);

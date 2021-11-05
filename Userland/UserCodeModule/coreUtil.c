@@ -32,6 +32,10 @@ void clearscreen(void) {
     penpos = 0;
 }
 
+void putchar(char c) {
+    print(&c, 1, gray);
+}
+
 void print(const char* buf, uint64_t count, Color color) {
 	penpos = sys_writeat(buf, count, (penpos & 0xFFFF), (penpos >> 16), color);
 }
