@@ -14,6 +14,7 @@ static char* word;
 static uint8_t lives;
 static uint8_t rightLetters;
 static uint8_t isRunning;
+static uint8_t cantUsedLetters;
 
 #define POSYWORD (5*height/6)
 #define POSXWORD ((width/2-(wordLength*2-1)*CHAR_WIDTH)/2)
@@ -21,6 +22,10 @@ static uint8_t isRunning;
 static void youLoseHangman() {
     sys_writeat("You Lose",8,(width/2-8*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, red);
     isRunning = 0;
+    for(int i=0; i<wordLength; i++) {
+        if(!usedLetters[word[i]])
+            sys_writeat(&word[i], 1, POSXWORD+2*i*CHAR_WIDTH, POSYWORD, red);
+    }
 }
 
 static void youWinHangman() {
@@ -32,7 +37,7 @@ static void (*lives_actions[])(void) = {youLoseHangman, drawSteveRightLeg, drawS
 
 static void printLives() {
     sys_drawrect((width/2-8*CHAR_WIDTH)/2+7*CHAR_WIDTH,POSYWORD+2*CHAR_HEIGHT,CHAR_WIDTH,CHAR_HEIGHT, black);
-    sys_writeat("Lifes: ",7,(width/2-8*CHAR_WIDTH)/2, POSYWORD+2*CHAR_HEIGHT, green);
+    sys_writeat("Lives: ",7,(width/2-8*CHAR_WIDTH)/2, POSYWORD+2*CHAR_HEIGHT, green);
     char liv = lives + '0';
     sys_writeat(&liv,1,(width/2-8*CHAR_WIDTH)/2+7*CHAR_WIDTH,POSYWORD+2*CHAR_HEIGHT, green);
 }
@@ -43,7 +48,9 @@ void initHangman() {
     lives = 7;
     rightLetters = 0;
     isRunning = 1;
+    cantUsedLetters = 0;
     sys_drawrect(0,height/3+1,width/2-1,2*height/3-1,black);
+    drawSteveRope();
     printLives();
 
     sys_writeat("Press any letter to try to guess.", 33, CHAR_WIDTH, height-CHAR_HEIGHT*2, gray);
@@ -57,20 +64,21 @@ void initHangman() {
     for(int i=0; i<CANT_LETTERS; i++) {
         usedLetters[i] = 0;
     }
-
 }
 
 void updateHangman(char letter) {
     if(isRunning) {
         if(!usedLetters[letter-'a']) {
             usedLetters[letter-'a'] = 1;
+            sys_writeat(&letter, 1, CHAR_WIDTH, height/3 + CHAR_HEIGHT*(cantUsedLetters+1), magenta);
 
+            cantUsedLetters++;
             uint8_t letterAppears = 0;
             for(uint8_t i=0; i<wordLength; i++) {
                 if(word[i]==letter) {
-                   sys_writeat(&word[i], 1, POSXWORD+2*i*CHAR_WIDTH, POSYWORD, yellow);
+                    sys_writeat(&word[i], 1, POSXWORD+2*i*CHAR_WIDTH, POSYWORD, yellow);
                     letterAppears++;
-              }
+                }
             }
             rightLetters += letterAppears;
             if(rightLetters == wordLength)

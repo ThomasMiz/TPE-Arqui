@@ -15,6 +15,9 @@ Color darkSkinColor = {0x5C, 0x72, 0x9C};
 Color darkShoesColor = {0x6B, 0x6B, 0x6B};
 Color lightShoesColor = {0x8F, 0x8F, 0x8F};
 Color shoesColor = {0x77, 0x77, 0x7A};
+Color ropeColor = {0x11, 0x31, 0x47};
+Color lightRopeColor = {0x4C, 0x7D, 0xC1};
+Color darkRopeColor = {0x0B, 0x24, 0x36};
 
 void drawSteveHead() {
     sys_drawrect(HEADPOSX,HEADPOSY,8*8,8*8, skinColor);
@@ -93,4 +96,21 @@ void drawSteveRightArm() {
     sys_drawrect(RIGHTARMPOSX+1*8,RIGHTARMPOSY+10*8, 8, 8, darkSkinColor);
     sys_drawrect(RIGHTARMPOSX+2*8,RIGHTARMPOSY+6*8, 8, 8, darkSkinColor);
     sys_drawrect(RIGHTARMPOSX,RIGHTARMPOSY+6*8, 8, 2*8, darkSkinColor);
+}
+
+void drawSteveRope() {
+    sys_drawrect(ROPEPOSX,ROPEPOSY,2*8,36*8,ropeColor);
+    sys_drawrect(ROPEPOSX,ROPEPOSY,12*8,2*8,ropeColor);
+    sys_drawrect(ROPEPOSX+12*8,ROPEPOSY,2*8,4*8,ropeColor);
+    sys_drawrect(ROPEPOSX, ROPEPOSY+2*8, 8, 8, lightRopeColor);
+    sys_drawrect(ROPEPOSX, ROPEPOSY+5*8, 8, 8, lightRopeColor);
+    sys_drawrect(ROPEPOSX, ROPEPOSY+2*8, 8, 8, lightRopeColor);
+    sys_drawrect(ROPEPOSX+8, ROPEPOSY+20*8, 8, 8, lightRopeColor);
+    sys_drawrect(ROPEPOSX+5*8, ROPEPOSY, 8, 2*8, darkRopeColor);
+    sys_drawrect(ROPEPOSX+11*8, ROPEPOSY, 8, 8, darkRopeColor);
+    sys_drawrect(ROPEPOSX, ROPEPOSY+24*8, 8, 2*8, darkRopeColor);
+    sys_drawrect(ROPEPOSX+12*8, ROPEPOSY+2*8, 8, 8, darkRopeColor);
+    sys_drawrect(ROPEPOSX, ROPEPOSY, 8, 8, darkRopeColor);
+    sys_drawrect(ROPEPOSX, ROPEPOSY+36*8, 2*8, 8, darkRopeColor);
+
 }

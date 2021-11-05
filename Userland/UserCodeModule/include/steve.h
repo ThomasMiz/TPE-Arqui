@@ -17,6 +17,8 @@ extern uint32_t width, height;
 #define LEFTARMPOSY TORSOPOSY
 #define RIGHTARMPOSX HEADPOSX+8*8
 #define RIGHTARMPOSY TORSOPOSY
+#define ROPEPOSY HEADPOSY-4*8
+#define ROPEPOSX LEFTARMPOSX-5*8
 
 void drawSteveRightLeg();
 void drawSteveLeftLeg();
@@ -24,5 +26,6 @@ void drawSteveRightArm();
 void drawSteveLeftArm();
 void drawSteveTorso();
 void drawSteveHead();
+void drawSteveRope();
 
 #endif

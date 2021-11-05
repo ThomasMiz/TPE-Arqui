@@ -26,18 +26,6 @@ static int8_t selectedColumn, selectedRow;
 static int8_t lastSelectedColumn, lastSelectedRow;
 static Cell currentSudoku[SUDOKU_SIZE][SUDOKU_SIZE];
 
-static char emptySudoku[SUDOKU_SIZE][SUDOKU_SIZE] = {
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'},
-    {'0','0','0','0','0','0','0','0','0'}
-    };
-
 static char easySudoku[SUDOKU_SIZE][SUDOKU_SIZE] = {
     {'0','8','3','4','7','0','0','2','6'},
     {'2','0','7','0','3','0','8','4','0'},
@@ -92,23 +80,27 @@ static uint8_t check(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize, uint8_
 
 static uint8_t isValidSudoku(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize) {
     uint8_t checked = 1;
-    for (int i = 0; i < boardSize; i++)
+    for (int i = 0; i < boardSize; i++) {
         for (int j = 0; j < boardSize; j++){
             if(board[i][j].value=='0') {
                 checked = 0;
             }
-            if (board[i][j].value>='1' && board[i][j].value <='9')
-                if (!board[i][j].isBlocked) {
-                    if(!check(board, boardSize, i, j)) {
-                        checked = 0;
-                        board[i][j].color = red;
-                    }
-                    else {
+            if (board[i][j].value>='1' && board[i][j].value <='9') {
+                if(!check(board, boardSize, i, j)) {
+                    checked = 0;
+                    board[i][j].color = red;
+                }
+                else {
+                    if(!board[i][j].isBlocked) {
                         board[i][j].color = green;
                     }
-                    
-                }
-        } 
+                    else{
+                        board[i][j].color = white;
+                    }      
+                }    
+            }
+        }
+    } 
                     
     return checked;
 }
@@ -137,16 +129,7 @@ static void drawNumbersSudoku(Cell sudoku[9][9]) {
 }
 
 void initSudoku() {
-    for(int i=0; i<SUDOKU_SIZE; i++) {
-        for(int j=0; j<SUDOKU_SIZE; j++) {
-            currentSudoku[i][j].value = emptySudoku[i][j];
-            currentSudoku[i][j].isBlocked = 1;
-            currentSudoku[i][j].color = white;
-        }
-    }
-    
     drawFrameSudoku();
-    drawNumbersSudoku(currentSudoku);
 
     sys_writeat("Press 1 for easy, 2 for normal or 3 for extreme mode.", 53, width/2+CHAR_WIDTH, height-CHAR_HEIGHT*3, gray);
     sys_writeat("Press arrows to move around the board.", 38, width/2+CHAR_WIDTH, height-CHAR_HEIGHT*2, gray);
@@ -165,7 +148,6 @@ static void youWinSudoku() {
             updateCellSudoku(i,j,currentSudoku[i][j].color);
         }
     }
-    initSudoku();
     isRunning = 0;
 }
 
@@ -196,6 +178,7 @@ void updateSudoku(char number) {
             }
         }
         drawNumbersSudoku(currentSudoku);
+        updateCellSudoku(selectedRow, selectedColumn, yellow);
     }
     else{
         if(!currentSudoku[selectedRow][selectedColumn].isBlocked) {
@@ -210,22 +193,24 @@ void updateSudoku(char number) {
 
 
 void changeCellSudoku(uint8_t scancode) {
-    lastSelectedRow = selectedRow;
-    lastSelectedColumn = selectedColumn;
+    if(!isRunning) {
+        lastSelectedRow = selectedRow;
+        lastSelectedColumn = selectedColumn;
 
-    if(scancode == UP) {
-        selectedRow = MAX(selectedRow-1,0); 
-    }
-    if(scancode == DOWN) {
-        selectedRow = MIN(8,selectedRow+1);
-    }
-    if(scancode == LEFT) {
-        selectedColumn = MAX(0,selectedColumn-1);
-    }
-    if(scancode == RIGHT) {
-        selectedColumn = MIN(8, selectedColumn+1);
-    } 
-    updateCellSudoku(lastSelectedRow, lastSelectedColumn, currentSudoku[lastSelectedRow][lastSelectedColumn].color);
+        if(scancode == UP) {
+            selectedRow = MAX(selectedRow-1,0); 
+        }
+        if(scancode == DOWN) {
+            selectedRow = MIN(8,selectedRow+1);
+        }
+        if(scancode == LEFT) {
+            selectedColumn = MAX(0,selectedColumn-1);
+        }
+        if(scancode == RIGHT) {
+            selectedColumn = MIN(8, selectedColumn+1);
+        } 
+        updateCellSudoku(lastSelectedRow, lastSelectedColumn, currentSudoku[lastSelectedRow][lastSelectedColumn].color);
 
-    updateCellSudoku(selectedRow, selectedColumn, yellow);
+        updateCellSudoku(selectedRow, selectedColumn, yellow);
+    }
 }

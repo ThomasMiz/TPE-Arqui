@@ -66,6 +66,7 @@ void divideAndConquer() {
 	sys_clearscreen();
 	sys_drawline(width/2, 0, width/2, height, magenta); //vertical line
 	sys_drawline(0, height/3, width, height/3, magenta); //horizontal line
+	sys_writeat("Press ESC to exit.", 18, CHAR_WIDTH, 0, gray);
 	initStopwatch();
 	initSudoku();
 	initHangman();
@@ -99,6 +100,11 @@ void divideAndConquer() {
 			}
 			else if(ascii>='a' && ascii<='z') {
 				updateHangman(ascii);
+			}
+			else if(ascii==27) {
+				sys_clearscreen();
+				penpos = 0;
+				break;
 			}
 		}
 	}
