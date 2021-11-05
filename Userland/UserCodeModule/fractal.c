@@ -54,12 +54,12 @@ static void setInitialState(PixelCell* cells, uint32_t width, uint32_t height, u
     double pixelDelta = (maxX - minX) / width;
     double minY = centerY - pixelDelta*height/2.0;
     
-    for (uint64_t i = pixelcount; i; i--, cells++) {
-        uint32_t x = i % width; // 'i' counts downwards, but it looks better this way ;)
-        uint32_t y = i / width;
-        Vec2 v = { minX + pixelDelta*x, minY + pixelDelta*y };
+    do {
+        pixelcount--;
+        Vec2 v = { minX + pixelDelta*(pixelcount % width), minY + pixelDelta*(pixelcount / width) };
         cells->v = v;
-    }
+        cells++;
+    } while (pixelcount != 0);
 }
 
 static const Vec2 c = { 0.2680149, 0.0 };
