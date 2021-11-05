@@ -70,10 +70,12 @@ void scanf(char* readbuf, uint64_t maxlen) {
 
     // We read up to maxlen-1 characters from the input.
     uint64_t count = 0;
-    while (count < maxlen-1) {
+    char c;
+    do {
         char c = getChar();
+
         if (c == '\n') { // If a '\n' is found, we zero-terminate the string and return.
-            readbuf[count++] = '\0';
+            readbuf[MIN(count, maxlen-1)] = '\0';
             print(&c, 1, gray);
             return;
         } if (c == '\b') { // If a '\b' character is found, we remove the last char from readbuf.
@@ -93,13 +95,9 @@ void scanf(char* readbuf, uint64_t maxlen) {
         } else {
             // We add the read character to the buffer and continue.
 	        print(&c, 1, gray);
-            readbuf[count++] = c;
+            if (count < maxlen-1)
+                readbuf[count] = c;
+            count++;
         }
-    }
-
-    // We zero-terminate the buffer.
-    readbuf[count] = '\0';
-
-    // We ignore any extra characters until a \n is read.
-    while (getChar() != '\n');
+    } while (1);
 }
