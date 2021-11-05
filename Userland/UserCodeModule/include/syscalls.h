@@ -2,6 +2,7 @@
 #define _SYSCALLS_H_
 
 #include <stdint.h>
+#include <color.h>
 
 #define STDIN 0
 #define STDOUT 1
@@ -12,12 +13,6 @@
 #define CHAR_WIDTH 9
 /* The height of a character in pixels. */
 #define CHAR_HEIGHT 16
-
-typedef struct {
-	uint8_t b;
-	uint8_t g;
-	uint8_t r;
-} Color;
 
 uint64_t sys_read(uint64_t fd, char* buf, uint64_t count);
 uint64_t sys_write(uint64_t fd, const char* buf, uint64_t count);

@@ -1,21 +1,18 @@
 #include <stdint.h>
 #include <syscalls.h>
 #include <timeUtil.h>
+#include <coreUtil.h>
 #include <string.h>
 #include <stopwatch.h>
 #include <timer.h>
+#include <hangman.h>
+#include <sudoku.h>
+#include <color.h>
 #define READBUF_LENGTH 32
 #define COMMANDS_LENGTH 7
 
 uint32_t width, height;
-
 uint32_t penpos = 0;
-
-Color color = {0x90, 0x90, 0x90};
-Color timeColor = {0x00, 0xFF, 0x00};
-Color commandColor = {0x42, 0x48, 0xF5};
-Color shellColor = {0xF2, 0xF5, 0x42};
-Color blackColor = {0x00, 0x00, 0x00};
 
 void getConsoleSize(uint32_t* width, uint32_t* height) {
 	uint64_t size = sys_screensize();
@@ -39,7 +36,7 @@ void help() {
 	"TIME                          Command to display the system day and time.\n"
 	"WHATIFIDIVIDEBY0              Command to verify the operation of the exception routine \"Divide by zero\"\n"
 	"WHATIFISEEANINVALIDOPCODE     Command to verify the operation of the exception routine \"Invalid Opcode\"\n",
-	1210,(penpos & 0x0000FFFF), (penpos >> 16), color);
+	1210,(penpos & 0x0000FFFF), (penpos >> 16), gray);
 }
 
 void divideByZero() {
@@ -53,8 +50,8 @@ void invalidOPCode() {
 void time() {
 	char buffer[DATE_AND_TIME_LENGTH+1];
 	getDateAndTime(buffer);
-	penpos = sys_writeat(buffer, DATE_AND_TIME_LENGTH+1, (penpos & 0xFFFF), (penpos >> 16), timeColor);
-	penpos = sys_writeat("\n", 1, (penpos & 0xFFFF), (penpos >> 16), color);
+	penpos = sys_writeat(buffer, DATE_AND_TIME_LENGTH+1, (penpos & 0xFFFF), (penpos >> 16), green);
+	penpos = sys_writeat("\n", 1, (penpos & 0xFFFF), (penpos >> 16), gray);
 }
 
 void inforeg() {
@@ -67,15 +64,17 @@ void printMem() {
 
 void divideAndConquer() {
 	sys_clearscreen();
-	sys_drawline(width/2, 0, width/2, height, shellColor); //vertical line
-	sys_drawline(0, height/3, width, height/3, shellColor); //horizontal line
+	sys_drawline(width/2, 0, width/2, height, magenta); //vertical line
+	sys_drawline(0, height/3, width, height/3, magenta); //horizontal line
 	initStopwatch();
+	initSudoku();
+	initHangman();
 
 	char readbuf[1];
 	uint64_t lastmillis = 0;
 
 	while(1) {
-		uint64_t readlen = sys_pollread(STDIN, readbuf, 1, 1);
+		uint64_t readlen = sys_pollread(KBDIN, readbuf, 1, 1);
 		uint64_t millis = sys_millis();
 
 		if(millis != lastmillis) {
@@ -84,12 +83,19 @@ void divideAndConquer() {
 			updateStopwatch(millis);
 		}
 
-		if(readlen != 0) {
-			if(readbuf[0] == ' ') {
+		if(readlen != 0) {	
+			char ascii = scancodeToAscii(readbuf[0]);
+			if(ascii == ' ') {
 				changeStatusStopwatch(millis);
 			}
-			else if(readbuf[0] == '\t') {
+			else if(ascii == '\t') {
 				stopStopwatch();
+			}
+			else if(readbuf[0] == UP || readbuf[0] == DOWN || readbuf[0] == LEFT || readbuf[0] == RIGHT) {
+				changeCellSudoku(readbuf[0]);
+			}
+			else if(ascii>48 && ascii<58) {
+				updateSudoku(ascii);
 			}
 		}
 	}
@@ -126,7 +132,7 @@ void scanCommand(char* readbuf, uint8_t maxLen) {
 		uint64_t readlen = sys_pollread(STDIN, &p[i], maxLen-i, 1);
 
 		if(readlen != 0) {
-			penpos = sys_writeat(&p[i], readlen, (penpos & 0xFFFF), (penpos >> 16), commandColor);
+			penpos = sys_writeat(&p[i], readlen, (penpos & 0xFFFF), (penpos >> 16), gray);
 		}
 		
 		i += readlen;
@@ -150,7 +156,7 @@ int main() {
 
 	sys_clearscreen();	
 	
-	penpos = sys_writeat("$ ",2,(penpos & 0xFFFF), (penpos >> 16), shellColor);
+	penpos = sys_writeat("$ ",2,(penpos & 0xFFFF), (penpos >> 16), magenta);
 
 	while(1) {
 		char readbuf[READBUF_LENGTH] = {0};
@@ -160,9 +166,9 @@ int main() {
 			commands_functions[index]();
 		}
 		else {
-			penpos = sys_writeat("No se encontro el comando.\n",27,(penpos & 0xFFFF), (penpos >> 16), color);
+			penpos = sys_writeat("No se encontro el comando.\n",27,(penpos & 0xFFFF), (penpos >> 16), gray);
 		}
-		penpos = sys_writeat("$ ",2,(penpos & 0xFFFF), (penpos >> 16), shellColor);
+		penpos = sys_writeat("$ ",2,(penpos & 0xFFFF), (penpos >> 16), magenta);
 	}
 	return 420;
 }
