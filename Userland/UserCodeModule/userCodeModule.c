@@ -15,6 +15,13 @@
 uint32_t width, height;
 
 static void help() {
+	static int helpCounter = 0;
+	if (helpCounter++ >= 3 && ((sys_millis() / 100) % 4) == 0) {
+		print("I need somebody!\n", 17, yellow);
+		helpCounter = 0;
+		return;
+	}
+
 	const char* helpstring = 
 	"DIVIDEANDCONQUER     The screen will be divided into four windows with the following functions:\n"
 	".                    1) The time will be displayed in hh:mm:ss format permanently updating.\n"
@@ -152,10 +159,9 @@ int main() {
 	getScreenSize(&width, &height);
 
 	clearscreen();	
-	
-	print("$ ", 2, magenta);
 
 	while(1) {
+		print("$ ", 2, magenta);
 		char readbuf[READBUF_LENGTH] = {0};
 		scanf(readbuf,READBUF_LENGTH);
 		char index;
@@ -165,7 +171,6 @@ int main() {
 		else {
 			print("No se encontro el comando.\n", 27, gray);
 		}
-		print("$ ", 2, magenta);
 	}
 
 	return 420;
