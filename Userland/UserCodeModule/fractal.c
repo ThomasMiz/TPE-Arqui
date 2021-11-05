@@ -106,8 +106,10 @@ void frc_run(void) {
         if ((readlen = sys_pollread(KBDIN, readbuf, sizeof(readbuf), 0)) != 0) {
             do {
                 readlen--;
-                if (readbuf[readlen] == (uint8_t)1) // check for scancode for pressing down the ESC key.
+                if (readbuf[readlen] == (uint8_t)1) { // check for scancode for pressing down the ESC key.
                     iteration = MAX_ITERATIONS; // Stop the for loop.
+                    readlen = 0;
+                }
             } while (readlen != 0);
         }
     }
@@ -118,5 +120,5 @@ void frc_run(void) {
     // Wait until we read the scancode for pressing down the ESC key.
     do {
         sys_read(KBDIN, readbuf, 1);
-    } while (*readbuf == 1); 
+    } while (*readbuf != (uint64_t)1); 
 }

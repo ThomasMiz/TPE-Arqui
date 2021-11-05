@@ -7,7 +7,7 @@ Reads up to `count` bytes from a file descriptor. If no data is available to rea
 Writes up to `count` bytes to a file descriptor. Returns the amount of bytes written.
 
 ## [0x02] uint64_t sys_time();
-Returns a struct with the current system time in seconds, minutes, and hours.
+Returns the current system time in seconds, minutes, and hours. Bits 0-7 represent hours, bits 8-15 minutes and bits 16-23 seconds.
 
 ## [0x03] uint64_t sys_millis();
 Returns the amount of milliseconds elapsed since system startup.
@@ -34,6 +34,9 @@ Draws a rectangle of pixels onto the screen.
 
 ## [0x0A] void sys_drawline(uint16_t fromX, uint16_t fromY, uint16_t toX, uint16_t toY, Color color);
 Draws a line between two pixels on the screen.
+
+## [0x0B] uint64_t sys_date();
+Returns the current date as a 64-bit number whose bits 0-7 represent day, bits 8-15 month and bits 16-23 year.
 
 # Default file descriptors
 - [0] `STDIN`: Standard input

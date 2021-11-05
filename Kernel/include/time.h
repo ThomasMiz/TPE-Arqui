@@ -15,10 +15,10 @@ uint64_t rtc_getElapsedSeconds();
 /* Gets the total amount of milliseconds elapsed since startup. */
 uint64_t rtc_getElapsedMilliseconds();
 
-/* Gets the current time */
+/* Gets an uint64_t whose bits 0-7 represent hours, bits 8-15 minutes and bits 16-23 seconds. */
 uint64_t rtc_getCurrentTime();
 
-/* Gets today's date */
+/* Gets an uint64_t whose bits 0-7 represent day, bits 8-15 month and bits 16-23 year. */
 uint64_t rtc_getCurrentDate();
 
 #endif
