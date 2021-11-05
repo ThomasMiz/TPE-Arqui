@@ -10,8 +10,13 @@
 #Object files
 *.o
 
-#?
+#Whatever the f this is
 .bash_history
+
+#Visual Studio files
+.vs
+[Bb]in/
+[Oo]bj/
 
 #Google Drive files
 *.ini
