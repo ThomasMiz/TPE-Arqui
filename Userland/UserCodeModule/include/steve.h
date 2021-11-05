@@ -6,7 +6,7 @@
 extern uint32_t width, height;
 
 #define HEADPOSX (width/4-4*8)
-#define HEADPOSY (height/3+6*8)
+#define HEADPOSY (height/3+10*8)
 #define TORSOPOSX HEADPOSX
 #define TORSOPOSY HEADPOSY+8*8
 #define LEFTLEGPOSX HEADPOSX

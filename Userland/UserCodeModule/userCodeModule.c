@@ -31,14 +31,14 @@ static void help() {
 	".                    3) In a third window user can play Sudoku by detecting the game completion and\n"
 	".                    possible invalid moves.\n"
 	".                    4) In the fourth window user can play Hangman.\n"
+	"DIVIDEBYZERO         Command to verify the operation of the exception routine \"Divide by zero\"\n"
+	"FRACTAL              Draws a pretty fractal on the screen. Warning: high CPU usage.\n"
 	"HELP                 Provides help information for commands.\n"
 	"INFOREG              Prints on screen the value of all registers.\n"
+	"INVALIDOPCODE        Command to verify the operation of the exception routine \"Invalid Opcode\"\n"
 	"PRINTMEM             Receives as argument a pointer and performs a memory dump of 32 bytes from the\n"
 	".                    address received as an argument.\n"
-	"TIME                 Command to display the system day and time.\n"
-	"DIVIDEBYZERO         Command to verify the operation of the exception routine \"Divide by zero\"\n"
-	"INVALIDOPCODE        Command to verify the operation of the exception routine \"Invalid Opcode\"\n"
-	"FRACTAL              Draws a pretty fractal on the screen. Warning: high CPU usage.\n";
+	"TIME                 Command to display the system day and time.\n";
 	print(helpstring, strlen(helpstring), gray);
 }
 

@@ -6,8 +6,8 @@
 extern uint32_t width, height;
 
 #define VERTICALX (width/2 + (width-width/2-CHAR_WIDTH*21)/2)
-#define VERTICALFROMY (height/3 +(height-height/3-CHAR_HEIGHT*21)/2)
-#define VERTICALTOY (height - (height-height/3-CHAR_HEIGHT*21)/2)
+#define VERTICALFROMY (height/3 +(height-height/3-CHAR_HEIGHT*21)/2 - 5*8)
+#define VERTICALTOY (height - (height-height/3-CHAR_HEIGHT*21)/2 - 5*8)
 
 #define HORIZONTALY VERTICALFROMY
 #define HORIZONTALFROMX VERTICALX
@@ -193,7 +193,7 @@ void sdk_update(char number) {
 
 
 void sdk_move(uint8_t scancode) {
-    if(!isRunning) {
+    if(isRunning) {
         lastSelectedRow = selectedRow;
         lastSelectedColumn = selectedColumn;
 

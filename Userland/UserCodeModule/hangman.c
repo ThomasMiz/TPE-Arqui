@@ -23,13 +23,13 @@ static void lose() {
     sys_writeat("You Lose",8,(width/2-8*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, red);
     isRunning = 0;
     for(int i=0; i<wordLength; i++) {
-        if(!usedLetters[word[i]])
+        if(!usedLetters[word[i]-'a'])
             sys_writeat(&word[i], 1, POSXWORD+2*i*CHAR_WIDTH, POSYWORD, red);
     }
 }
 
 static void win() {
-        sys_writeat("You Win",7,(width/2-7*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, green);
+    sys_writeat("You Win",7,(width/2-7*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, green);
     isRunning = 0;
 }
 
@@ -70,13 +70,13 @@ void hang_update(char letter) {
     if(isRunning) {
         if(!usedLetters[letter-'a']) {
             usedLetters[letter-'a'] = 1;
-            sys_writeat(&letter, 1, CHAR_WIDTH, height/3 + CHAR_HEIGHT*(cantUsedLetters+1), magenta);
+            sys_writeat(&letter, 1, CHAR_WIDTH, height/3 + CHAR_HEIGHT*(cantUsedLetters+1)+3*CHAR_HEIGHT, magenta);
 
             cantUsedLetters++;
             uint8_t letterAppears = 0;
             for(uint8_t i=0; i<wordLength; i++) {
                 if(word[i]==letter) {
-                    sys_writeat(&word[i], 1, POSXWORD+2*i*CHAR_WIDTH, POSYWORD, yellow);
+                    sys_writeat(&word[i], 1, POSXWORD+2*i*CHAR_WIDTH, POSYWORD, green);
                     letterAppears++;
                 }
             }
