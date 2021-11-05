@@ -4,8 +4,8 @@
 #include <time.h>
 #include <keyboard.h>
 
-// From loader.asm, initializes the kernel from 0 and reloads usercode.
-extern void loader(void);
+// From loader.asm, resets states and re-calls kernel main.
+extern void resetmain(void);
 
 static const char* exceptionMessages[] = {
 /* 0x00 */ "Divide by Zero",
@@ -116,5 +116,5 @@ void exceptionHandler(uint64_t code, const uint64_t regdata[17]) {
     kbd_clearBuffer();
     scr_clear();
     _cli();
-    loader();
+    resetmain();
 }
