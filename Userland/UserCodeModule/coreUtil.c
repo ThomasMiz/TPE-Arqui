@@ -57,7 +57,6 @@ char getChar() {
 	if (isBlinkerOn)
 			sys_drawrect(rectX, rectY, 9, 3, black);
 
-	print(&c, 1, gray);
 	return c;
 }
 
@@ -66,19 +65,36 @@ void scanf(char* readbuf, uint64_t maxlen) {
         return;
 
     // We read up to maxlen-1 characters from the input.
-    for (; maxlen > 1; maxlen--) {
+    uint64_t count = 0;
+    while (count < maxlen-1) {
         char c = getChar();
         if (c == '\n') { // If a '\n' is found, we zero-terminate the string and return.
-            *readbuf = '\0';
+            readbuf[count++] = '\0';
+            print(&c, 1, gray);
             return;
+        } if (c == '\b') { // If a '\b' character is found, we remove the last char from readbuf.
+            if (count != 0) {
+                count--;
+                uint32_t penX = penpos & 0x0000FFFF;
+                uint32_t penY = penpos >> 16;
+                if (penX < 9) {
+                    if (penY != 0) penY--;
+                    penX = (sys_screensize() & 0xFFFFFFFF) / 9 * 9;
+                } else {
+                    penX -= 9;
+                }
+                penpos = penX | (penY << 16);
+                sys_drawrect(penX, penY, 9, 16, black);
+            }
+        } else {
+            // We add the read character to the buffer and continue.
+	        print(&c, 1, gray);
+            readbuf[count++] = c;
         }
-    
-        // We add the read character to the buffer and continue.
-        *(readbuf++) = c;
     }
 
     // We zero-terminate the buffer.
-    *readbuf = '\0';
+    readbuf[count] = '\0';
 
     // We ignore any extra characters until a \n is read.
     while (getChar() != '\n');
