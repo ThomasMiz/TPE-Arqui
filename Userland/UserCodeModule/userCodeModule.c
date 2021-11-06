@@ -11,10 +11,17 @@
 #include <libasm.h>
 #include <fractal.h>
 #define READBUF_LENGTH 32
+#define MAX_PARAMETERS 3
+#define LENGTH_PARAMETERS 20
 
 uint32_t width, height;
 
-static void help() {
+static void help(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try help without parameters\n", 28, gray);
+		return;
+	}
+	
 	static int helpCounter = 0;
 	if (helpCounter++ >= 3 && ((sys_millis() / 100) % 4) == 0) {
 		print("I need somebody!\n", 17, yellow);
@@ -42,16 +49,31 @@ static void help() {
 	print(helpstring, strlen(helpstring), gray);
 }
 
-static void divideByZero() {
+static void divideByZero(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try dividebyzero without parameters\n", 36, gray);
+		return;
+	}
+
 	int i = 5 / 0;
 }
 
-static void invalidOPCode() {
+static void invalidOPCode(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try invalidopcode without parameters\n", 37, gray);
+		return;
+	}
+
 	print("Running invalid opcode...", 25, gray);
 	runInvalidOpcode();
 }
 
-static void time() {
+static void time(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try time without parameters\n", 28, gray);
+		return;
+	}
+
 	char buffer[DATE_AND_TIME_LENGTH+1];
 	getDateAndTime(buffer);
 	print(buffer, DATE_AND_TIME_LENGTH+1, green);
@@ -62,7 +84,11 @@ static const char* registerNames[18] = {
     "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
 };
 
-static void inforeg() {
+static void inforeg(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try inforeg without parameters\n", 31, gray);
+		return;
+	}
 	const uint64_t* regdata = dumpRegisters();
 	char buf[18];
 	buf[0] = '0';
@@ -80,11 +106,52 @@ static void inforeg() {
 	}
 }
 
-static void printMem() {
-
+static char valueToHexChar(uint8_t value) {
+    return value >= 10 ? (value - 10 + 'A') : (value + '0');
 }
 
-void divideAndConquer() {
+static void printMem(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]==0){
+		print("Printmem needs a pointer to a memory address\n", 45, gray);
+		return;
+	}
+
+	uint64_t len = strlen(parameters[0]);
+	if(len<3 || len>18 || parameters[0][0]!='0' || parameters[0][1]!='x') {
+		print("Parameter is not a valid address\n", 33, gray);
+		return;
+	}
+
+	uint64_t dir = 0;
+	for(int i=2; i<len; i++){
+		if(parameters[0][i]>='0' && parameters[0][i]<='9') {
+			dir = 16*dir + parameters[0][i]-'0';
+		}
+		else if(parameters[0][i]>='a' && parameters[0][i]<='f') {
+			dir = 16*dir + parameters[0][i]-'a';
+		}
+		else {
+			print("Parameter is not a valid address\n", 33, gray);
+		}
+	}
+
+	uint8_t* p = (uint8_t*)dir;
+
+	for(int i=0; i<32; i++) {
+		char buf[5] = "0x00 ";
+		buf[2] = valueToHexChar(p[i] >> 4);
+		buf[3] = valueToHexChar(p[i] & 0x0F);
+		print(buf, 5, gray);
+	}
+	print("\n",1,gray);
+}
+
+void divideAndConquer(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try divideandconquer without parameters\n", 40, gray);
+		return;
+	}
+
 	clearscreen();
 	sys_drawline(width/2, 0, width/2, height, magenta); //vertical line
 	sys_drawline(0, height/3, width, height/3, magenta); //horizontal line
@@ -117,13 +184,14 @@ void divideAndConquer() {
 			else if(readbuf[0] == UP || readbuf[0] == DOWN || readbuf[0] == LEFT || readbuf[0] == RIGHT) {
 				sdk_move(readbuf[0]);
 			}
-			else if(ascii>48 && ascii<58) {
+			else if(ascii>='0' && ascii<='9') {
 				sdk_update(ascii);
 			}
 			else if(ascii>='a' && ascii<='z') {
 				hang_update(ascii);
 			}
 			else if(ascii==27) {
+				stw_stop();
 				clearscreen();
 				break;
 			}
@@ -133,17 +201,27 @@ void divideAndConquer() {
 	clearscreen();
 }
 
-static void fractal() {
+static void fractal(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try fractal without parameters\n", 31, gray);
+		return;
+	}
+	
 	frc_run();
 	clearscreen();
 }
 
-static void clear() {
-	clearscreen();
+static void clear(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
+	if(parameters[0][0]!=0){
+		print("Try clear without parameters\n", 29, gray);
+		return;
+	}
+
+	clearscreen();	
 }
 
 static const char* commands[] = {"clear", "divideandconquer", "dividebyzero", "fractal", "help", "inforeg", "invalidopcode", "printmem", "time"};
-static void (*commands_functions[])(void) = {clear, divideAndConquer, divideByZero, fractal, help, inforeg, invalidOPCode, printMem, time};
+static void (*commands_functions[])(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) = {clear, divideAndConquer, divideByZero, fractal, help, inforeg, invalidOPCode, printMem, time};
 #define COMMANDS_LENGTH (sizeof(commands)/sizeof(commands[0]))
 
 static char indexCommand(char* readbuf) {
@@ -160,6 +238,36 @@ static char indexCommand(char* readbuf) {
 	return -1;
 }
 
+void getCommand(char command[READBUF_LENGTH], char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS], char readbuf[READBUF_LENGTH]) {
+	int i, j, k;
+	
+	for(i=0, j=0; i<READBUF_LENGTH && readbuf[i]!=' '; i++){
+			command[j++] = readbuf[i];
+	}
+
+	command[j] = 0;
+
+	while(i<READBUF_LENGTH && readbuf[i]==' '){
+		i++;
+	}
+
+	for(j=0, k=0; i<READBUF_LENGTH;) {
+		if(k>=MAX_PARAMETERS || j>=LENGTH_PARAMETERS)
+			return;
+		if(readbuf[i]!=' ') {
+			parameters[k][j++] = readbuf[i++];
+		}
+		else {
+			parameters[k][j] = 0;
+			k++;
+			j=0;
+			while(i<READBUF_LENGTH && readbuf[i]==' '){
+				i++;
+			}
+		}
+	}
+}
+
 int main() {
 	getScreenSize(&width, &height);
 
@@ -170,12 +278,18 @@ int main() {
 		print("$ ", 2, magenta);
 		char readbuf[READBUF_LENGTH] = {0};
 		scanf(readbuf,READBUF_LENGTH);
+
+		char command[READBUF_LENGTH] = {0};
+		char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS] = {{0}};
+		getCommand(command, parameters, readbuf);
+
 		char index;
-		if((index = indexCommand(readbuf))>=0) {
-			commands_functions[index]();
+		if((index = indexCommand(command))>=0) {
+			commands_functions[index](parameters);
 		}
 		else {
-			print("No se encontro el comando.\n", 27, gray);
+			print(command, strlen(command), gray);
+			print(": command not found\n", 20, gray);
 		}
 	}
 

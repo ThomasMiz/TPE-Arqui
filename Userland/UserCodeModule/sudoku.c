@@ -83,6 +83,7 @@ static uint8_t isValid(Cell board[SUDOKU_SIZE][SUDOKU_SIZE], int boardSize) {
     for (int i = 0; i < boardSize; i++) {
         for (int j = 0; j < boardSize; j++){
             if(board[i][j].value=='0') {
+                board[i][j].color = blue;
                 checked = 0;
             }
             if (board[i][j].value>='1' && board[i][j].value <='9') {
@@ -129,11 +130,14 @@ static void drawNumbers(Cell sudoku[9][9]) {
 }
 
 void sdk_init() {
+    if(isRunning == 1)
+        isRunning = 0;
     drawFrame();
 
     sys_writeat("Press 1 for easy, 2 for normal or 3 for extreme mode.", 53, width/2+CHAR_WIDTH, height-CHAR_HEIGHT*3, gray);
     sys_writeat("Press arrows to move around the board.", 38, width/2+CHAR_WIDTH, height-CHAR_HEIGHT*2, gray);
     sys_writeat("Press numbers to put them in the selected cell.", 47, width/2+CHAR_WIDTH, height-CHAR_HEIGHT, gray);
+
 
     selectedRow = 0;
     selectedColumn = 0;
@@ -180,13 +184,16 @@ void sdk_update(char number) {
         drawNumbers(currentSudoku);
         updateCell(selectedRow, selectedColumn, yellow);
     }
-    else{
+    else if(isRunning){
         if(!currentSudoku[selectedRow][selectedColumn].isBlocked) {
             currentSudoku[selectedRow][selectedColumn].value = number;
             if(isValid(currentSudoku,SUDOKU_SIZE))
                  win(); 
-            else
+            else {
                 drawNumbers(currentSudoku);
+                updateCell(selectedRow, selectedColumn, yellow);
+            }
+                
         }
     }
 }
