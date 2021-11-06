@@ -18,4 +18,7 @@ uint64_t itoa(uint64_t number, char* s);
 /* Converts a uint64_t into a 16-char hexadecimal number. */
 void uint64ToHex(uint64_t n, char buf[16]);
 
+/* Attempts to convert a hex string with 0x prefix into a memory address. Returns 0 if the operation failed, 1 otherwise. */
+int tryReadHexAddress(char* s, uint8_t** result);
+
 #endif

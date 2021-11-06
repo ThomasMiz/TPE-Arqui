@@ -82,3 +82,22 @@ void uint64ToHex(uint64_t n, char buf[16]) {
         n /= 16;
     } while(i-- != 0);
 }
+
+int tryReadHexAddress(char* s, uint8_t** result) {
+	uint64_t len = strlen(s);
+	if(len<3 || len>18 || s[0]!='0' || s[1]!='x')
+		return 0;
+
+	uint64_t dir = 0;
+	for(int i=2; i<len; i++){
+		if(s[i]>='0' && s[i]<='9')
+			dir = 16*dir + s[i]-'0';
+		else if(s[i]>='a' && s[i]<='f')
+			dir = 16*dir + s[i]-'a';
+		else
+			return 0;
+	}
+
+	*result = dir;
+	return 1;
+}

@@ -47,7 +47,7 @@ void scr_setPenColor(Color color);
 /* Advances the pen to the beginning of the next line. */
 void scr_printNewline(void);
 
-/* Prints a single character with the pen, wrapping around the end of the screen and pushingold lines up if necessary. */
+/* Prints a single character with the pen, wrapping around the end of the screen and pushing old lines up if necessary. */
 void scr_printChar(char c);
 
 /* Prints a string of characters with the pen, wrapping around the end of the screen and pushing old lines up if necessary.

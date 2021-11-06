@@ -110,33 +110,19 @@ static char valueToHexChar(uint8_t value) {
     return value >= 10 ? (value - 10 + 'A') : (value + '0');
 }
 
+
 static void printMem(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
 	if(parameters[0][0]==0){
 		print("Printmem needs a pointer to a memory address\n", 45, gray);
 		return;
 	}
 
-	uint64_t len = strlen(parameters[0]);
-	if(len<3 || len>18 || parameters[0][0]!='0' || parameters[0][1]!='x') {
-		print("Parameter is not a valid address\n", 33, gray);
+	uint8_t* p;
+	if (!tryReadHexAddress(parameters[0], &p)) {
+		print("Parameter is not a valid address. Must be a 0x-prefixed hex number\n", 67, gray);
 		return;
 	}
-
-	uint64_t dir = 0;
-	for(int i=2; i<len; i++){
-		if(parameters[0][i]>='0' && parameters[0][i]<='9') {
-			dir = 16*dir + parameters[0][i]-'0';
-		}
-		else if(parameters[0][i]>='a' && parameters[0][i]<='f') {
-			dir = 16*dir + parameters[0][i]-'a';
-		}
-		else {
-			print("Parameter is not a valid address\n", 33, gray);
-		}
-	}
-
-	uint8_t* p = (uint8_t*)dir;
-
+	
 	for(int i=0; i<32; i++) {
 		char buf[5] = "0x00 ";
 		buf[2] = valueToHexChar(p[i] >> 4);

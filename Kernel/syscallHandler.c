@@ -6,8 +6,11 @@
 #include <video.h>
 
 static uint64_t sys_write_handler(uint64_t fd, const char* buf, uint64_t count) {
+	if (fd != STDOUT) // Ignore any file handle that isn't STDOUT
+		return 0;
+
 	for (int i = 0; i < count; i++)
-		scr_printChar(buf[i]); // only for testing!! TODO: make this nice & check filedescriptor
+		scr_printChar(buf[i]);
 	return count;
 }
 
@@ -24,7 +27,7 @@ static uint64_t sys_millis_handler() {
 }
 
 static void sys_clearscreen_handler() {
-	scr_clear(); // TODO: change to new console when implemented
+	scr_clear();
 }
 
 static uint32_t sys_writeat_handler(const char* buf, uint64_t count, uint16_t x, uint16_t y, Color color) {
