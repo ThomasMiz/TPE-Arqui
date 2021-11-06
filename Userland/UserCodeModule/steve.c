@@ -112,5 +112,9 @@ void drawSteveRope() {
     sys_drawrect(ROPEPOSX+12*8, ROPEPOSY+2*8, 8, 8, darkRopeColor);
     sys_drawrect(ROPEPOSX, ROPEPOSY, 8, 8, darkRopeColor);
     sys_drawrect(ROPEPOSX, ROPEPOSY+36*8, 2*8, 8, darkRopeColor);
+}
 
+void drawSteveClearEyes() {
+    sys_drawrect(HEADPOSX+2*8, HEADPOSY+4*8,8,8, white);
+    sys_drawrect(HEADPOSX+5*8, HEADPOSY+4*8,8,8, white);
 }

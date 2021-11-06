@@ -20,6 +20,7 @@ static uint8_t cantUsedLetters;
 #define POSXWORD ((width/2-(wordLength*2-1)*CHAR_WIDTH)/2)
 
 static void lose() {
+    drawSteveClearEyes();
     sys_writeat("You Lose",8,(width/2-8*CHAR_WIDTH)/2, POSYWORD+4*CHAR_HEIGHT, red);
     isRunning = 0;
     for(int i=0; i<wordLength; i++) {

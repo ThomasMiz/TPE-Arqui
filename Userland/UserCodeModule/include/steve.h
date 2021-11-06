@@ -27,5 +27,6 @@ void drawSteveLeftArm();
 void drawSteveTorso();
 void drawSteveHead();
 void drawSteveRope();
+void drawSteveClearEyes();
 
 #endif
