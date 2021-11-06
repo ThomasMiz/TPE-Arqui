@@ -55,7 +55,7 @@ static void divideByZero(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
 		return;
 	}
 
-	int i = 5 / 0;
+	runDivideByZero();
 }
 
 static void invalidOPCode(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
@@ -210,7 +210,7 @@ static const char* commands[] = {"clear", "divideandconquer", "dividebyzero", "f
 static void (*commands_functions[])(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) = {clear, divideAndConquer, divideByZero, fractal, help, inforeg, invalidOPCode, printMem, time};
 #define COMMANDS_LENGTH (sizeof(commands)/sizeof(commands[0]))
 
-static char indexCommand(char* readbuf) {
+static int indexCommand(char* readbuf) {
 	char *p = readbuf;
 	for(int i=0; i<COMMANDS_LENGTH; i++) {
 		int cmp;
@@ -269,7 +269,7 @@ int main() {
 		char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS] = {{0}};
 		getCommand(command, parameters, readbuf);
 
-		char index;
+		int index;
 		if((index = indexCommand(command))>=0) {
 			commands_functions[index](parameters);
 		}

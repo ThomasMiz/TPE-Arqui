@@ -98,6 +98,6 @@ int tryReadHexAddress(char* s, uint8_t** result) {
 			return 0;
 	}
 
-	*result = dir;
+	*result = (uint8_t*)dir;
 	return 1;
 }

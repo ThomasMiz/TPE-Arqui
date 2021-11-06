@@ -20,11 +20,6 @@ static void CSquare(const Vec2* a, Vec2* res) {
     res->y = a->x*a->y + a->y*a->x;
 }
 
-static void CAdd(const Vec2* a, const Vec2* b, Vec2* res) {
-    res->x = a->x + b->x;
-    res->y = a->y + b->y;
-}
-
 typedef struct {
     uint8_t isFinalized;
     Vec2 v;
@@ -103,7 +98,7 @@ void frc_run(void) {
         }
 
         // Check if should exit
-        if ((readlen = sys_pollread(KBDIN, readbuf, sizeof(readbuf), 0)) != 0) {
+        if ((readlen = sys_pollread(KBDIN, (char*)readbuf, sizeof(readbuf), 0)) != 0) {
             do {
                 readlen--;
                 if (readbuf[readlen] == (uint8_t)1) { // check for scancode for pressing down the ESC key.
@@ -119,6 +114,6 @@ void frc_run(void) {
 
     // Wait until we read the scancode for pressing down the ESC key.
     do {
-        sys_read(KBDIN, readbuf, 1);
+        sys_read(KBDIN, (char*)readbuf, 1);
     } while (*readbuf != (uint64_t)1); 
 }

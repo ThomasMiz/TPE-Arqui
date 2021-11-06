@@ -67,7 +67,7 @@ uint16_t scr_getPenY(void) {
 }
 
 void scr_clear(void) {
-    uint8_t* pos = (uint8_t*)screenData->framebuffer;
+    uint8_t* pos = (uint8_t*)((uint64_t)screenData->framebuffer);
     for (uint32_t len = 3 * (uint32_t)screenData->width * screenData->height; len; len--, pos++)
         *pos = 0;
     penX = 0;
@@ -169,8 +169,8 @@ void scr_printNewline(void) {
     if (penY + (2*CHAR_HEIGHT) <= screenData->height) {
         penY += CHAR_HEIGHT;
     } else {
-        void* dst = (void*)screenData->framebuffer;
-        void* src = (void*)(screenData->framebuffer + 3 * (CHAR_HEIGHT * (uint64_t)screenData->width));
+        void* dst = (void*)((uint64_t)screenData->framebuffer);
+        void* src = (void*)(dst + 3 * (CHAR_HEIGHT * (uint64_t)screenData->width));
         uint64_t len = 3 * ((uint64_t)screenData->width * (screenData->height - CHAR_HEIGHT));
         memcpy(dst, src, len);
         memset(dst+len, 0, 3 * (uint64_t)screenData->width * CHAR_HEIGHT);

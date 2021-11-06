@@ -17,8 +17,8 @@ static char scancodeToAsciiTable[] = {
 
 #define SCANCODE_ARR_LENGTH (sizeof(scancodeToAsciiTable)/sizeof(scancodeToAsciiTable[0]))
 
-char scancodeToAscii(char scancode) {
-    return scancode < SCANCODE_ARR_LENGTH ? scancodeToAsciiTable[scancode] : 0;
+char scancodeToAscii(uint8_t scancode) {
+    return scancode < SCANCODE_ARR_LENGTH ? scancodeToAsciiTable[scancode] : '\0';
 }
 
 void getScreenSize(uint32_t* width, uint32_t* height) {
@@ -70,7 +70,6 @@ void scanf(char* readbuf, uint64_t maxlen) {
 
     // We read up to maxlen-1 characters from the input.
     uint64_t count = 0;
-    char c;
     do {
         char c = getChar();
 

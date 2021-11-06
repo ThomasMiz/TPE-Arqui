@@ -7,7 +7,7 @@
 #define BIT_SCANCODE_DOWN 0b00000000
 
 /* Converts a scancode value to it's ASCII representation. Returns '\0' if there's no ASCII equivalent. */
-char scancodeToAscii(char scancode);
+char scancodeToAscii(uint8_t scancode);
 
 /* Gets the amount of scancodes in the internal buffer waiting to be used. */
 unsigned int kbd_getBufferLength();

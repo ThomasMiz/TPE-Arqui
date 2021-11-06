@@ -48,14 +48,14 @@ static uint64_t sys_pollread_handler(uint64_t fd, char* buf, uint64_t count, uin
 		return 0;
 	
 	// We do an initial read of the available characters
-	unsigned int totalRead = (fd == STDIN ? kbd_readCharacters(buf, count) : kbd_readScancodes(buf, count));
+	unsigned int totalRead = (fd == STDIN ? kbd_readCharacters(buf, count) : kbd_readScancodes((uint8_t*)buf, count));
 
 	if (timeout_ms != 0) {
 		// We block until data was read or the timeout expires
 		uint64_t start_ms = rtc_getElapsedMilliseconds();
 		do {
 			_hlt();
-			totalRead += (fd == STDIN ? kbd_readCharacters(buf + totalRead, count - totalRead) : kbd_readScancodes(buf + totalRead, count - totalRead));
+			totalRead += (fd == STDIN ? kbd_readCharacters(buf + totalRead, count - totalRead) : kbd_readScancodes((uint8_t*)buf + totalRead, count - totalRead));
 		} while (totalRead == 0 && (rtc_getElapsedMilliseconds() - start_ms) < timeout_ms);
 	}
 
@@ -78,6 +78,8 @@ static void sys_drawline_handler(uint16_t fromX, uint16_t fromY, uint16_t toX, u
 	scr_drawLine(fromX, fromY, toX, toY, color);
 }
 
+// These function pointer casts are safe, provided all syscall handler functions take up to 5 parameters and they
+// are all of integer type.
 static uint64_t (*syscall_handlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8) = {
 	sys_read_handler, sys_write_handler, sys_time_handler, sys_millis_handler, sys_clearscreen_handler,
 	sys_writeat_handler, sys_screensize_handler, sys_pollread_handler, sys_drawpoint_handler, sys_drawrect_handler,

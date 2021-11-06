@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <moduleLoader.h>
 #include <idtLoader.h>
+#include <interrupts.h>
+#include <string.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -16,7 +18,7 @@ static void* const userDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
 
-void clearBSS(void * bssAddress, uint64_t bssSize) {
+void clearBSS(void* bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
 }
 
@@ -29,7 +31,6 @@ void* getStackBase() {
 }
 
 void* initializeKernelBinary() {
-	char buffer[10];
 	void * moduleAddresses[] = {
 		userCodeModuleAddress,
 		userDataModuleAddress

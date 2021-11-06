@@ -11,7 +11,7 @@
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
-char scancodeToAscii(char scancode);
+char scancodeToAscii(uint8_t scancode);
 
 void getScreenSize(uint32_t* width, uint32_t* height);
 

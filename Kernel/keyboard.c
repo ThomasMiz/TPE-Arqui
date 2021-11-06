@@ -18,8 +18,8 @@ static char scancodeToAsciiTable[] = {
 
 #define SCANCODE_ARR_LENGTH (sizeof(scancodeToAsciiTable)/sizeof(scancodeToAsciiTable[0]))
 
-char scancodeToAscii(char scancode) {
-    return scancode < SCANCODE_ARR_LENGTH ? scancodeToAsciiTable[scancode] : 0;
+char scancodeToAscii(uint8_t scancode) {
+    return scancode < SCANCODE_ARR_LENGTH ? scancodeToAsciiTable[scancode] : '\0';
 }
 
 static uint8_t scancodeBuffer[SCANCODE_BUFFER_MAXLENGTH];
