@@ -9,6 +9,8 @@ GLOBAL timerIntRoutine
 GLOBAL keyboardIntRoutine
 GLOBAL divideByZeroIntRoutine
 GLOBAL invalidOpcodeIntRoutine
+GLOBAL generalprotIntRoutine
+GLOBAL pagefaultIntRoutine
 GLOBAL syscallIntRoutine
 
 EXTERN timerIntHandler
@@ -155,6 +157,12 @@ divideByZeroIntRoutine:
 
 invalidOpcodeIntRoutine:
     exceptionHandlerMaster 06h
+
+generalprotIntRoutine:
+	exceptionHandlerMaster 0Dh
+
+pagefaultIntRoutine:
+	exceptionHandlerMaster 0Eh
 
 syscallIntRoutine:
 ; syscalls params:	RDI	RSI	RDX	R10	R8	R9

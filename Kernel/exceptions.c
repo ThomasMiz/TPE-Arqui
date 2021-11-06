@@ -14,7 +14,15 @@ static const char* exceptionMessages[] = {
 /* 0x03 */ 0,
 /* 0x04 */ 0,
 /* 0x05 */ 0,
-/* 0x06 */ "Invalid Opcode"
+/* 0x06 */ "Invalid Opcode",
+/* 0x07 */ 0,
+/* 0x08 */ 0,
+/* 0x09 */ 0,
+/* 0x0A */ 0,
+/* 0x0B */ 0,
+/* 0x0C */ 0,
+/* 0x0D */ "General Protection",
+/* 0x0E */ "Page Fault",
 };
 
 #define BORDER_SIZE 20
@@ -102,9 +110,9 @@ void exceptionHandler(uint64_t code, const uint64_t regdata[17]) {
             scr_print("   ");
     }
 
-    // We wait for 5 seconds to prevent the user from accidentally exiting before seeing the error.
+    // We wait for 3 seconds to prevent the user from accidentally exiting before seeing the error.
     uint64_t start_ms = rtc_getElapsedMilliseconds();
-    do { _hlt(); } while (rtc_getElapsedMilliseconds() - start_ms < 5000);
+    do { _hlt(); } while (rtc_getElapsedMilliseconds() - start_ms < 3000);
 
     kbd_clearBuffer();
     scr_print("\nPress any key to restart.");

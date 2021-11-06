@@ -25,16 +25,20 @@ extern void timerIntRoutine(void);
 extern void keyboardIntRoutine(void);
 extern void divideByZeroIntRoutine(void);
 extern void invalidOpcodeIntRoutine(void);
+extern void generalprotIntRoutine(void);
+extern void pagefaultIntRoutine(void);
 extern void syscallIntRoutine(void);
 
 static void setup_IDT_entry (int index, uint64_t offset);
 
 void load_idt(void) {
 	_cli();
-	
+
     // Setup exception interrupts
 	setup_IDT_entry(0x00, (uint64_t)&divideByZeroIntRoutine);
 	setup_IDT_entry(0x06, (uint64_t)&invalidOpcodeIntRoutine);
+	setup_IDT_entry(0x0D, (uint64_t)&generalprotIntRoutine);
+	setup_IDT_entry(0x0E, (uint64_t)&pagefaultIntRoutine);
 
     // Setup hardware interrupts
 	setup_IDT_entry(0x20, (uint64_t)&timerIntRoutine);
