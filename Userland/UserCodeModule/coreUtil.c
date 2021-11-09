@@ -83,8 +83,8 @@ void scanf(char* readbuf, uint64_t maxlen) {
                 uint32_t penX = penpos & 0x0000FFFF;
                 uint32_t penY = penpos >> 16;
                 if (penX < 9) {
-                    if (penY != 0) penY--;
-                    penX = (sys_screensize() & 0xFFFFFFFF) / 9 * 9;
+                    if (penY != (uint32_t)0) penY -= 16;
+                    penX = ((sys_screensize() & 0xFFFFFFFF) / 9 - 1) * 9;
                 } else {
                     penX -= 9;
                 }
