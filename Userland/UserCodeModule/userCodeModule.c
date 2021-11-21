@@ -108,7 +108,7 @@ static void inforeg(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
 		}
 	}
 	else {
-		print("Press CTRL to save a screenshot of the registers.\n",50, gray);
+		print("You must first take a screenshot of the registers. Press CTRL to do so and try again.\n", 86, gray);
 	}
 	
 }

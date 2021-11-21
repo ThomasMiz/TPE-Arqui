@@ -12,6 +12,7 @@ GLOBAL invalidOpcodeIntRoutine
 GLOBAL generalprotIntRoutine
 GLOBAL pagefaultIntRoutine
 GLOBAL syscallIntRoutine
+
 GLOBAL hasRegdump
 GLOBAL regdump
 
@@ -62,9 +63,9 @@ picSlaveMask:
 	push rbx
 	push rcx
 	push rdx
-	push rbp
-	push rdi
 	push rsi
+	push rdi
+	push rbp
 	push r8
 	push r9
 	push r10
@@ -84,9 +85,9 @@ picSlaveMask:
 	pop r10
 	pop r9
 	pop r8
-	pop rsi
-	pop rdi
 	pop rbp
+	pop rdi
+	pop rsi
 	pop rdx
 	pop rcx
 	pop rbx
@@ -120,7 +121,7 @@ picSlaveMask:
 	mov [regdata+120], r15
 
 	mov rax, rsp ; We get the value of RSP when the exception ocurred by adding the amount of pushed bytes to the current value of RSP.
-	add rax, 0x35
+	add rax, 0x28
 	mov [regdata+56], rax
 	mov rax, [rsp] ; We get the value of RIP when the exception ocurred by taking the interruption's return address.
 	mov [regdata+128], rax
@@ -154,17 +155,32 @@ keyboardIntRoutine:
 	jne .continue
 
 	; We dump the registers from the stack into the regdump vector
-	mov rax, 17
-	mov rbx, (regdump+16*8)
-	mov rcx, rsp
-.loop:
-	mov rdx, [rcx]
-	mov [rbx], rdx
-	sub rbx, 8
-	add rcx, 8
-	dec rax
-	jnz .loop
+;Order: "RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
+	mov [regdump+2*8], rbx
+	mov [regdump+3*8], rcx
+	mov [regdump+4*8], rdx
+	mov [regdump+5*8], rsi
+	mov [regdump+6*8], rdi
+	mov [regdump+7*8], rbp
+	mov [regdump+9*8], r8
+	mov [regdump+10*8], r9
+	mov [regdump+11*8], r10
+	mov [regdump+12*8], r11
+	mov [regdump+13*8], r12
+	mov [regdump+14*8], r13
+	mov [regdump+15*8], r14
+	mov [regdump+16*8], r15
+
+	mov rax, rsp
+	add rax, 160
+	mov [regdump+8*8], rax ;RSP
+
+	mov rax, [rsp+15*8]
+	mov [regdump], rax ;RIP
 	
+	mov rax, [rsp+14*8]
+	mov [regdump+1*8], rax ;RAX
+
 	mov byte [hasRegdump], 1
 	jmp .end
 
