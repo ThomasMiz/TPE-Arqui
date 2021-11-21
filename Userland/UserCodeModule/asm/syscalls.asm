@@ -10,7 +10,7 @@ GLOBAL sys_drawpoint
 GLOBAL sys_drawrect
 GLOBAL sys_drawline
 GLOBAL sys_date
-
+GLOBAL sys_inforeg
 section .text
 
 sys_read:
@@ -74,6 +74,12 @@ sys_drawline:
 
 sys_date:
     mov rax, 0x0B
+    mov r10, rcx
+    int 80h
+    ret
+
+sys_inforeg:
+    mov rax, 0x0C
     mov r10, rcx
     int 80h
     ret

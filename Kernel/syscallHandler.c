@@ -5,6 +5,9 @@
 #include <keyboard.h>
 #include <video.h>
 
+extern uint8_t hasRegdump;
+extern const uint64_t regdump[17];
+
 static uint64_t sys_write_handler(uint64_t fd, const char* buf, uint64_t count) {
 	if (fd != STDOUT) // Ignore any file handle that isn't STDOUT
 		return 0;
@@ -78,12 +81,21 @@ static void sys_drawline_handler(uint16_t fromX, uint16_t fromY, uint16_t toX, u
 	scr_drawLine(fromX, fromY, toX, toY, color);
 }
 
+static uint8_t sys_inforeg_handler(uint64_t reg[17]) {
+	if(hasRegdump){
+		for(uint8_t i=0; i<17; i++){
+			reg[i] = regdump[i];
+		}
+	}
+	return hasRegdump;
+}
+
 // These function pointer casts are safe, provided all syscall handler functions take up to 5 parameters and they
 // are all of integer type.
 static uint64_t (*syscall_handlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8) = {
 	sys_read_handler, sys_write_handler, sys_time_handler, sys_millis_handler, sys_clearscreen_handler,
 	sys_writeat_handler, sys_screensize_handler, sys_pollread_handler, sys_drawpoint_handler, sys_drawrect_handler,
-	sys_drawline_handler, sys_date_handler
+	sys_drawline_handler, sys_date_handler, sys_inforeg_handler
 };
 
 uint64_t syscallHandler(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {

@@ -26,5 +26,6 @@ uint64_t sys_pollread(uint64_t fd, char* buf, uint64_t count, uint64_t timeout_m
 void sys_drawpoint(uint16_t x, uint16_t y, Color color);
 void sys_drawrect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color);
 void sys_drawline(uint16_t fromX, uint16_t fromY, uint16_t toX, uint16_t toY, Color color);
+uint8_t sys_inforeg(uint64_t reg[17]);
 
 #endif

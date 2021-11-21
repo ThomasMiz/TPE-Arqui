@@ -12,6 +12,8 @@ GLOBAL invalidOpcodeIntRoutine
 GLOBAL generalprotIntRoutine
 GLOBAL pagefaultIntRoutine
 GLOBAL syscallIntRoutine
+GLOBAL hasRegdump
+GLOBAL regdump
 
 EXTERN timerIntHandler
 EXTERN keyboardIntHandler
@@ -203,6 +205,5 @@ syscallIntRoutine:
 
 section .bss
 regdata	resq	18	; reserve space for 18 qwords (one for each register we want to show on exceptions).
-
 regdump	resq	17	; reserve space for 17 qwords (one for each register we want to show on inforeg).
 hasRegdump resb 1 ; reserve 1 byte for a boolean on whether a regdump has already occurred.

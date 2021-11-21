@@ -80,8 +80,8 @@ static void time(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
 	print("\n", 1, gray);
 }
 
-static const char* registerNames[18] = {
-    "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
+static const char* registerNames[17] = {
+    "RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
 };
 
 static void inforeg(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
@@ -89,21 +89,28 @@ static void inforeg(char parameters[MAX_PARAMETERS][LENGTH_PARAMETERS]) {
 		print("Try inforeg without parameters\n", 31, gray);
 		return;
 	}
-	const uint64_t* regdata = dumpRegisters();
-	char buf[18];
-	buf[0] = '0';
-	buf[1] = 'x';
 
-	for (int i = 0; i < 16; i++) {
-        print(registerNames[i], 3, gray);
-        print(": ", 2, gray);
-    	uint64ToHex(regdata[i], buf+2);
-        print(buf, sizeof(buf), gray);
-		if ((i % 4) == 3)
-			print("\n", 1, gray);
-		else
-			print("   ", 3, gray);
+	uint64_t regdata[17];
+	if(sys_inforeg(regdata)) {
+		char buf[18];
+		buf[0] = '0';
+		buf[1] = 'x';
+
+		for (int i = 0; i < 17; i++) {
+			print(registerNames[i], 3, gray);
+			print(": ", 2, gray);
+			uint64ToHex(regdata[i], buf+2);
+			print(buf, sizeof(buf), gray);
+			if ((i % 4) == 0)
+				print("\n", 1, gray);
+			else
+				print("   ", 3, gray);
+		}
 	}
+	else {
+		print("Press CTRL to save a screenshot of the registers.\n",50, gray);
+	}
+	
 }
 
 static char valueToHexChar(uint8_t value) {
