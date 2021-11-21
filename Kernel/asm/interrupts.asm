@@ -142,12 +142,40 @@ timerIntRoutine:
 keyboardIntRoutine:
     pushState
 
-	; Read the scancode from the keyboard and put it in RDI.
+	; Read the scancode from the keyboard and put it in RAX.
 	mov rax, 0
 	in al, 60h
+
+	; If the read scancode is "CTRL keydown", we do a register dump.
+	; Otherwise, we call keyboardIntHandler if the scancode isn't "CTRL keyup" (the CTRL key is used exclusively for regdumps)
+	cmp al, 0b00011101
+	jne .continue
+
+	; We dump the registers from the stack into the regdump vector
+	mov rax, 17
+	mov rbx, (regdump+16*8)
+	mov rcx, rsp
+.loop:
+	mov rdx, [rcx]
+	mov [rbx], rdx
+	sub rbx, 8
+	add rcx, 8
+	dec rax
+	jnz .loop
+	
+	mov byte [hasRegdump], 1
+	jmp .end
+
+.continue:
+	; If the read scancode is "CTRL keyup", we skip calling keyboardIntHandler
+	cmp al, 0b10011101
+	je .end
+
+	; Call keyboardIntHandler with the read scancode as parameter.
 	mov rdi, rax
 	call keyboardIntHandler
 
+.end:
 	endHardwareInterrupt
 	popState
 	iretq
@@ -175,3 +203,6 @@ syscallIntRoutine:
 
 section .bss
 regdata	resq	18	; reserve space for 18 qwords (one for each register we want to show on exceptions).
+
+regdump	resq	17	; reserve space for 17 qwords (one for each register we want to show on inforeg).
+hasRegdump resb 1 ; reserve 1 byte for a boolean on whether a regdump has already occurred.
